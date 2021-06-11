@@ -95,11 +95,11 @@ body {
 #penguinPreview img{
     height: 100%;
 }
-
 /* For gameboard assets */
 .gameBoard{
     background: black;
 }
+/* Gameboard: Utility List */
 #utilityList {
     margin-top: 2%;
     margin-left: 2%;
@@ -141,11 +141,13 @@ body {
 #utilityList button:hover {
     background-size: 100% 4px, auto;
 }
+/* Gameboard: Treasure and Path */
 #submarine {
     background: url('/Backgrounds/submarine.png');
     background-size: 72% 50%;
     background-repeat: no-repeat; 
     background-position: bottom;
+    opacity: 20;
     height: 240px;
     width: 300px;
     position: absolute;
@@ -161,21 +163,39 @@ body {
 .grid1 {
     position: absolute;
     left: 300px;
-    top: 150px;
+    top: 175px;
     display: inline-grid;
     width: 600px;
-    height: 200px;
-    grid-template-columns: 100px 100px 100px 100px 100px 100px;
-    grid-template-rows: 100px 100px;
+    height: 140px;
+    grid-template-columns: repeat(6,100px);
+}
+.grid1 .treasure{
+    width: 35px;
+    height: 28px;
+    position: relative;
+    top: 50px;
 }
 .grid1 div{
     display: inline;
-    width: 80px;
-    height: 100px;
+    width: 100px;
+    height: 140px;
     /* border: black 3px solid; */
     text-align: center;
     line-height: 100px;
+    background: url('/Backgrounds/platform.png');
+    background-repeat: no-repeat;
+    background-size: 90px 50px;
+    background-position-y: bottom;
 }
-.grid1 .treasureTile {
-    background: red;
+.penguins {
+    display: inline-block;
+    border: transparent 2px solid;
+    width: 80px;
+    height: 100px;
+    background-size: auto 70px;
+    background-repeat: no-repeat;
+    background-position-y: bottom;
 }
+/* .penguins img{
+
+} */
