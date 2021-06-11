@@ -1,5 +1,5 @@
 body {
-    background: url('/Beachfront.jpg'), no-repeat;
+    background: url('/Backgrounds/Beachfront.jpg'), no-repeat;
     background-size: 1280px 720px;
     width: 1280px;
     height: 720px;
@@ -141,9 +141,8 @@ body {
 #utilityList button:hover {
     background-size: 100% 4px, auto;
 }
-
 #submarine {
-    background: url('submarine.png');
+    background: url('/Backgrounds/submarine.png');
     background-size: 72% 50%;
     background-repeat: no-repeat; 
     background-position: bottom;
@@ -151,7 +150,15 @@ body {
     width: 300px;
     position: absolute;
 }
-.path {
+.pathTile{
+    text-align: center;
+}
+.pathTile img{ /* will be div */
+    position: relative;
+    height: 100%;
+    right: 10px;
+}
+.grid1 {
     position: absolute;
     left: 300px;
     top: 150px;
@@ -161,9 +168,14 @@ body {
     grid-template-columns: 100px 100px 100px 100px 100px 100px;
     grid-template-rows: 100px 100px;
 }
-.path div{
+.grid1 div{
     display: inline;
-    width: 100px;
+    width: 80px;
     height: 100px;
+    /* border: black 3px solid; */
+    text-align: center;
+    line-height: 100px;
+}
+.grid1 .treasureTile {
     background: red;
 }

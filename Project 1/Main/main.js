@@ -4,7 +4,7 @@ choosePlayerButton = (event) => {
     playerCount = $(event.currentTarget).attr('players')
     $('#penguinPreview').empty()
     for (i=0; i<playerCount; i++){
-        penguinPreviews = ["1  Blue.png", '2 Red.png', '3 Green.png', '4 Yellow.png', '6 Black.png']
+        penguinPreviews = ["/Penguins/1 Blue.png", '/Penguins/2 Red.png', '/Penguins/3 Green.png', '/Penguins/4 Yellow.png', '/Penguins/5 Black.png']
         $('#penguinPreview').append('<img src="' + penguinPreviews[i] + '">')
     }
 }
