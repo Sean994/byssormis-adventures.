@@ -1,7 +1,7 @@
 var playerArray = []
 var path = []
 var treasureArray = []
-for (i=0; i<28; i++){
+for (i=0; i<25; i++){
     path.push(i)
     if((Math.floor(i/6)+1)<5)
     treasureArray.push(Math.floor(i/6)+1)
@@ -23,9 +23,12 @@ startGameButton = (event) => {
         $(event.currentTarget).attr('class', 'startOrHowChosen')
         $('#landingPage').hide()
         $('#gameBoard').show()
-        generatePenguinDivs(playerCount)
+        generatePlayerDivs(playerCount)
+        generatePathDivs()
         generateTreasureArray(treasureArray)
     }
+    $('body').css('background', "url('/Backgrounds/Underwater720.jpg')")
+    $('body').css('background-repeat', "no-repeat")
 }
 howToPlayButton = (event) => {
     $(event.currentTarget).attr('class', 'startOrHowChosen') 
@@ -39,7 +42,8 @@ class Player {
         this.tier2 = 0;
         this.tier3 = 0;
         this.tier4 = 0;
-        this.movement = 0
+        this.movement = 0;
+        this.position = -1;
         this.dive = true;
         this.abyssAdventures = 0;
         this.misAdventures = 0;
@@ -62,12 +66,12 @@ class Player {
     }
 }
 // create player Objects and their board pieces (div)
-generatePenguinDivs = (playerCount) => {
+generatePlayerDivs = (playerCount) => {
     userName = ["Blue", "Red", "Green", "Yellow", "Black"]
     penguinPreviews = ["/Penguins/1 Blue.png", '/Penguins/2 Red.png', '/Penguins/3 Green.png', '/Penguins/4 Yellow.png', '/Penguins/5 Black.png', '/Penguins/6 Orange.png']
     for(let i = 0; i<playerCount; i++){
-        playerArray.push( new Player (userName[i]))
-        $('#submarine').append($('<div>')
+        playerArray.push( new Player (userName[i])) // array gets new Player Obj
+        $('#submarine').append($('<div>') // spawns player at submarine div
             .attr('id', userName[i])
             .addClass('penguins')
             .css('background-image', 'url("' + penguinPreviews[i] + '")')
@@ -75,7 +79,26 @@ generatePenguinDivs = (playerCount) => {
             )
     }
 }
-// Treasure assets here
+generatePathDivs = () => {
+    classArray = ['grid1', 'grid2', 'grid3', 'grid4']
+    $gameBoard = $('#gameBoard')
+    adder = 0
+    for (i=0; i<4; i++){
+        $grid = $('<div>').addClass('grid').attr('id', 'grid'+(i+1))
+        $gameBoard.append($grid)
+        for (j=0; j<6; j++){
+            if (i===0 || i===2)
+            $pathTile = $('<div>').addClass('pathTile').attr('id', j+adder)
+            if (i===1)
+            $pathTile = $('<div>').addClass('pathTile').attr('id', 11-j)
+            if (i===3)
+            $pathTile = $('<div>').addClass('pathTile').attr('id', 23-j)
+            $grid.append($pathTile)
+        }
+        adder += 6
+    }
+}
+// based on treasureArray, assigns the img of chest with respective tier to treasure divs
 generateTreasureArray = (treasureArray) => {
     treasureImg = ['', '/Treasures/1 Treasure.png', '/Treasures/2 Treasure.png', '/Treasures/3 Treasure.png', '/Treasures/4 Treasure.png']
     count = 0

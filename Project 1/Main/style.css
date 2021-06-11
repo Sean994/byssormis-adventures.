@@ -1,5 +1,5 @@
 body {
-    background: url('/Backgrounds/Beachfront.jpg'), no-repeat;
+    background: url('/Backgrounds/Beachfront.jpg');
     background-size: 1280px 720px;
     width: 1280px;
     height: 720px;
@@ -144,9 +144,9 @@ body {
 /* Gameboard: Treasure and Path */
 #submarine {
     background: url('/Backgrounds/submarine.png');
-    background-size: 72% 50%;
+    background-size: 42% auto;
     background-repeat: no-repeat; 
-    background-position: bottom;
+    background-position: 65px 80px;
     opacity: 20;
     height: 240px;
     width: 300px;
@@ -160,22 +160,39 @@ body {
     height: 100%;
     right: 10px;
 }
-.grid1 {
+.grid {
+display: inline-grid;
+width: 600px;
+height: 140px;
+grid-template-columns: repeat(6,100px)
+}
+#grid1 {
     position: absolute;
     left: 300px;
-    top: 175px;
-    display: inline-grid;
-    width: 600px;
-    height: 140px;
-    grid-template-columns: repeat(6,100px);
+    top: 140px;
 }
-.grid1 .treasure{
+#grid2 {
+    position: absolute;
+    left: 420px;
+    top: 280px;
+}
+#grid3 {
+    position: absolute;
+    left: 230px;
+    top: 420px;
+}
+#grid4 {
+    position: absolute;
+    left: 370px;
+    top: 560px;
+}
+.grid .treasure{
     width: 35px;
     height: 28px;
     position: relative;
     top: 50px;
 }
-.grid1 div{
+.grid div{
     display: inline;
     width: 100px;
     height: 140px;
