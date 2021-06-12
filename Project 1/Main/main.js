@@ -4,6 +4,7 @@ var treasureArray = []
 var turnSwitcher = 0
 var setDirection = true
 var diceThrow = true
+var actionTurn = false
 for (i=0; i<25; i++){
     path.push(i)
     if((Math.floor(i/6)+1)<5)
@@ -166,18 +167,40 @@ rollDice = (event) => {
     setDirection = false;
     movePlayer()
 }
-
 movePlayer = () => {
     while (currentPlayer.movement != 0){
-        console.log('hi')
         currentPlayer.movement --
         currentPlayer.position ++
         renderPath = '#' + currentPlayer.position
+        // To check if landing div has any existing penguins
+        if ($(renderPath).children().hasClass('penguins')){
+            currentPlayer.movement++
+        }
         renderPlayer = $('#' + currentPlayer.playerName)
-        console.log(renderPath, renderPlayer)
         $(renderPath).prepend(renderPlayer)
     }
+    $('#announcer').text('Landed at tile ' +(currentPlayer.position+1)+', choose action.')
+    actionTurn = true;
 }
+pickTreasure = () => {
+    $('#announcer').text('Landed at tile ' +(currentPlayer.position+1)+', choose action.')
+}
+dropTreasure = () => {
+    currentPlayer.tier1 = 1
+    currentPlayer.tier2 = 3
+    currentPlayer.tier4 = 2
+}
+doNothing = (event) => {
+    if (actionTurn){
+        console.log('working')
+        turnSwitcher ++
+        currentPlayer = playerArray[(turnSwitcher%playerArray.length)]
+        $('#announcer').text("It is " + currentPlayer.playerName + "'s turn")
+        actionTurn = false;
+    }
+}
+
+
 
 const main = () => {
     $('#gameBoard').hide()
@@ -188,6 +211,9 @@ const main = () => {
     $('#diveDeep').on('click', (event) => setDiveDeep(event))
     $('#returnSub').on('click', (event) => setReturnSub(event))
     $('#rollDie').on('click', (event) => rollDice(event))
+    $('#pickTreasure').on('click', (event) => pickTreasure(event))
+    $('#dropTreasure').on('click', (event) => dropTreasure(event))
+    $('#doNothingButton').on('click', (event) => doNothing(event))
 }
 
 $(main);
