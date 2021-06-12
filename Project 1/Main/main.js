@@ -53,10 +53,9 @@ class Player {
         this.misAdventures = 0;
     }
     // user functions 1. rolls die 2. calculate the no. of move that turn
-    rollMovement(){
-        movementGain = rollDice()
-        treasureTotal = this.tier1 + this.tier2 + this.tier3 + this.tier4
-        this.movement = movementGain - treasureTotal
+    diveOne(){
+        this.movement -= 1;
+        this.position +- 1;
     }
     pickUpTreasure(){
 
@@ -107,6 +106,7 @@ generateTreasureArray = (treasureArray) => {
         var img = document.createElement("img")
         img.src = treasureImg[i]
         img.className = 'treasure'
+        img.id = 'treasure' + count
         if(treasureImg[i] !== '')
             src.appendChild(img)
         count++
@@ -116,6 +116,10 @@ generateTreasureArray = (treasureArray) => {
 whosTurnIsIt = () => {
     currentPlayer = playerArray[turnSwitcher%playerArray.length]
     $('#announcer').text("It is " + currentPlayer.playerName + "'s turn")
+    // interval 2s
+    // currentPlayer has N Treasures
+    // interval 2s
+    // Air supply minus N
 }
 // Player option 1: Set Dive Deeper or Return
 setDiveDeep = (event) => {
@@ -160,6 +164,19 @@ rollDice = (event) => {
     }
     diceThrow = false;
     setDirection = false;
+    movePlayer()
+}
+
+movePlayer = () => {
+    while (currentPlayer.movement != 0){
+        console.log('hi')
+        currentPlayer.movement --
+        currentPlayer.position ++
+        renderPath = '#' + currentPlayer.position
+        renderPlayer = $('#' + currentPlayer.playerName)
+        console.log(renderPath, renderPlayer)
+        $(renderPath).prepend(renderPlayer)
+    }
 }
 
 const main = () => {

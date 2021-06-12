@@ -96,9 +96,6 @@ body {
     height: 100%;
 }
 /* For gameboard assets */
-.gameBoard{
-    background: black;
-}
 /* Gameboard: Utility List */
 #utilityList {
     margin-top: 1%;
@@ -106,9 +103,9 @@ body {
     padding-left: 20px;
     height: 90px;
     width: 90%;
-    border-radius: 8px;
-    background: blue;
-    background: linear-gradient(to left, navy, royalblue, deepskyblue 1500px);
+    border-radius: 15px;
+    box-shadow:  inset 8px 12px 20px rgba(255,255,255,0.3);
+    background: #283869;
 }
 #utilityList .gameInfo{
     display: inline-block;
@@ -124,6 +121,10 @@ body {
     height: 50px;
     font-size: 14px;
     text-align: center;
+}#utilityList .gameInfo:hover{
+    transform: translateY(-10px);
+    transition: 0.5s;
+    box-shadow: inset 10px 5px 5px rgba(0,0,0,0.3);
 }
 #utilityList button{
     display: inline-block;
@@ -145,20 +146,20 @@ body {
 #utilityList button:hover {
     background-size: 100% 4px, auto;
 }
-  /* The container <div> - needed to position the dropdown content */
-  .dropdown {
+.dropdown {
     position: relative;
     display: inline-block;
-  }
-  /* Dropdown Content (Hidden by Default) */
-  .dropdown-content {
+}
+.dropdown-content {
     display: none;
     position: absolute;
     background-color: transparent;
     min-width: 120px;
     z-index: 1;
-  }
-  .dropdown:hover .dropdown-content {display: block;}
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
 /* Gameboard: Treasure and Path */
 #submarine {
     background: url('/Backgrounds/submarine.png');
@@ -172,11 +173,6 @@ body {
 }
 .pathTile{
     text-align: center;
-}
-.pathTile img{ /* will be div */
-    position: relative;
-    height: 100%;
-    right: 10px;
 }
 .grid {
 display: inline-grid;
@@ -204,31 +200,30 @@ grid-template-columns: repeat(6,100px)
     left: 370px;
     top: 560px;
 }
-.grid .treasure{
-    width: 35px;
-    height: 28px;
-    position: relative;
-    top: 50px;
-}
-.grid div{
-    display: inline;
+.pathTile{
     width: 100px;
     height: 140px;
-    /* border: black 3px solid; */
-    text-align: center;
-    line-height: 100px;
     background: url('/Backgrounds/platform.png');
     background-repeat: no-repeat;
     background-size: 90px 50px;
     background-position-y: bottom;
 }
+.treasure{
+    display: block;
+    width: auto;
+    height: 28px;
+    position: absolute;
+    transform: translateX(30px);
+    top: 80px;
+}
+
 .penguins {
     display: inline-block;
-    border: transparent 2px solid;
     width: 80px;
-    height: 100px;
+    height: 80px;
     background-size: auto 70px;
     background-repeat: no-repeat;
+    background-position-x: center;
     background-position-y: bottom;
 }
 /* .penguins img{
