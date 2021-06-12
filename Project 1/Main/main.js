@@ -1,10 +1,12 @@
 var playerArray = []
+var movementGain = 0
 var path = []
 var treasureArray = []
 var turnSwitcher = 0
 var setDirection = true
-var diceThrow = true
+var diceThrow = false
 var actionTurn = false
+var returnedPlayer = 0
 for (i=0; i<25; i++){
     path.push(i)
     if((Math.floor(i/6)+1)<5)
@@ -50,6 +52,7 @@ class Player {
         this.movement = 0;
         this.position = -1;
         this.dive = true;
+        this.returned = false;
         this.abyssAdventures = 0;
         this.misAdventures = 0;
     }
@@ -115,6 +118,7 @@ generateTreasureArray = (treasureArray) => {
 }
 // Player turn roller 
 whosTurnIsIt = () => {
+    turnSwitcher = 0
     currentPlayer = playerArray[turnSwitcher%playerArray.length]
     $('#announcer').text("It is " + currentPlayer.playerName + "'s turn")
     // interval 2s
@@ -151,23 +155,26 @@ rollDice = (event) => {
         movementGain = Math.floor(Math.random() * 6 + 1)
         currentPlayer.treasureTotal = currentPlayer.tier1 + currentPlayer.tier2 + currentPlayer.tier3 + currentPlayer.tier4 
         if (currentPlayer.treasureTotal === 0){
-            $('#announcer').text(currentPlayer.playerName + ' rolled ' + movementGain)
             currentPlayer.movement += movementGain 
         } else {
-            $('#announcer').text(currentPlayer.playerName + ' rolled ' + movementGain + '-' + currentPlayer.treasureTotal)
             currentPlayer.movement += movementGain - currentPlayer.treasureTotal 
             if (currentPlayer.movement < 0){
                 currentPlayer.movement = 0;
+                $('#announcer').text('Your treasure felt too heavy')
             }
         }
-    } else {
-        $('#announcer').text('You already rolled '+ movementGain)
     }
+    // } else {
+    //     $('#announcer').text('You already rolled '+ movementGain)
+    // }
     diceThrow = false;
-    setDirection = false;
-    movePlayer()
+    if(currentPlayer.dive === true && currentPlayer.movement > 0)
+        divePlayer()
+    if(currentPlayer.dive === false && currentPlayer.movement > 0)
+        returnPlayer()  
 }
-movePlayer = () => {
+divePlayer = () => {
+    setDirection = false;
     while (currentPlayer.movement != 0){
         currentPlayer.movement --
         currentPlayer.position ++
@@ -182,25 +189,70 @@ movePlayer = () => {
     $('#announcer').text('Landed at tile ' +(currentPlayer.position+1)+', choose action.')
     actionTurn = true;
 }
+returnPlayer = () => {
+    setDirection = false;
+    while (currentPlayer.movement != 0){
+        currentPlayer.movement --
+        currentPlayer.position --
+        renderPath = '#' + currentPlayer.position
+        // To check if landing div has any existing penguins
+        if ($(renderPath).children().hasClass('penguins')){
+            currentPlayer.movement++
+        }
+        renderPlayer = $('#' + currentPlayer.playerName)
+        $(renderPath).prepend(renderPlayer)
+        $('#announcer').text('Landed at tile ' +(currentPlayer.position+1)+', choose action.')
+        if (currentPlayer.position === -1){
+            $('#submarine').prepend(renderPlayer)
+            $('#announcer').text(currentPlayer.playerName + ' returned safely to the submarine!')
+            currentPlayer.movement = 0
+            currentPlayer.returned = true;
+            returnedPlayer ++
+            switchPlayer()
+        }
+    }   
+    actionTurn = true;
+}
 pickTreasure = () => {
+    actionTurn = false;
     $('#announcer').text('Landed at tile ' +(currentPlayer.position+1)+', choose action.')
 }
 dropTreasure = () => {
+    actionTurn = false;
     currentPlayer.tier1 = 1
     currentPlayer.tier2 = 3
     currentPlayer.tier4 = 2
 }
 doNothing = (event) => {
-    if (actionTurn){
-        console.log('working')
-        turnSwitcher ++
-        currentPlayer = playerArray[(turnSwitcher%playerArray.length)]
-        $('#announcer').text("It is " + currentPlayer.playerName + "'s turn")
-        actionTurn = false;
+    if (actionTurn)
+        switchPlayer()
+    actionTurn = false;
+}
+switchPlayer = () => {
+    if (returnedPlayer === playerArray.length){
+        newRound()
+    }
+    turnSwitcher ++
+    currentPlayer = playerArray[(turnSwitcher%playerArray.length)]
+    $('#announcer').text("It is " + currentPlayer.playerName + "'s turn")
+    $('#direction').text('Set direction')
+    actionTurn = false;
+    setDirection = true;
+    movementGain = 0;
+    if (currentPlayer.returned === true){
+        switchPlayer()
     }
 }
 
-
+newRound = () => {
+    for (i=0; i<playerArray.length; i++){
+        playerArray[i].returned = false;
+    }
+    // convert treasure into score
+    // sort playerArray by object key value (playerArray[i].score)
+    console.log('round end!')
+    alert('round end')
+}
 
 const main = () => {
     $('#gameBoard').hide()
