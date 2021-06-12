@@ -36,17 +36,22 @@
     </div>
     <div id='gameBoard'>
         <div id='utilityList'>
-            <div id='airSupply'>
-                    AIR SUPPLY: 
+            <div id='airSupply' class='gameInfo'>
+                    AIR SUPPLY: 25
             </div>
-            <div id='dice'>
-                    Roll to 6
+            <div id='announcer' class='gameInfo'>
+                Im announcer
             </div>
-            <div id='announcer'>
-                    It is player 1's turn, Red Penguin
-            </div>
-            <button id='scoreBoardButton'>Scoreboard</button>              
-            <button id='howToPlayButton'>How to play</button>
+            <div class="dropdown">
+                <button class="dropbtn" id='direction'>Go Big / Go Home</button>
+                <div class="dropdown-content">
+                    <button id='diveDeep'>Dive Deep</button>
+                    <button id='returnSub'>Return to Sub</button>
+                </div>
+              </div>
+            <button id='rollDie'>Roll Dice</button>  
+            <button id='actionButton'>Tile Action</button>              
+            <button id='scoreBoardButton'>Scoreboard</button>
         </div>
         <div id='submarine'>           
         </div>

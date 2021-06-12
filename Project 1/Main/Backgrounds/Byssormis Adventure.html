@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<!-- saved from url=(0032)http://127.0.0.1:5500/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com/">
+    <link href="./Byssormis Adventure_files/css2" rel="stylesheet">
+    <link rel="stylesheet" href="./Byssormis Adventure_files/style.css">
+    <script src="./Byssormis Adventure_files/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="./Byssormis Adventure_files/main.js"></script>
+    <title>Byssormis Adventure</title>
+</head>
+<body style="background: url(&quot;/Backgrounds/Underwater720.jpg&quot;) no-repeat;">
+    <div id="landingPage" style="display: none;">   
+         <h1 class="gameTitle">BYSSORMIS ADVENTURES</h1>
+         <h3 class="gameTitle">Choose number of players</h3>
+         <div id="playerNumberChoices">
+            <button players="1" class="choosePlayers">Single Player</button>
+            <button players="2" class="chosen">2 Players</button>
+            <button players="3" class="choosePlayers">3 Players</button>
+            <button players="4" class="choosePlayers">4 Players</button>
+            <button players="5" class="choosePlayers">5 Players</button>
+            <button players="6" class="choosePlayers">6 Players</button>
+        </div>
+        <div id="penguinPreview"><img src="./Byssormis Adventure_files/1 Blue.png"><img src="./Byssormis Adventure_files/2 Red.png"></div>
+            <button class="startOrHowChosen" id="startGameButton">Start Game</button>
+            <button class="startOrHow" id="howToPlayButton">How to play</button>
+    </div>
+    <div id="gameBoard" style="">
+        <div id="utilityList">
+            <div id="airSupply" class="gameInfo">
+                    AIR SUPPLY: 25
+            </div>
+            <div id="announcer" class="gameInfo">
+                Im announcer
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn" id="direction">Go Big / Go Home</button>
+                <div class="dropdown-content">
+                    <button id="diveDeep">Dive Deep</button>
+                    <button id="returnSub">Return to Sub</button>
+                </div>
+              </div>
+            <button id="rollDie">Roll Dice</button>  
+            <button id="actionButton">Tile Action</button>              
+            <button id="scoreBoardButton">Scoreboard</button>
+        </div>
+        <div id="submarine">           
+        <div id="Blue" class="penguins" style="background-image: url(&quot;/Penguins/1 Blue.png&quot;);"></div><div id="Red" class="penguins" style="background-image: url(&quot;/Penguins/2 Red.png&quot;);"></div></div>
+    <div class="grid" id="grid1"><div class="pathTile" id="0"><img src="./Byssormis Adventure_files/1 Treasure.png" class="treasure"></div><div class="pathTile" id="1"><img src="./Byssormis Adventure_files/1 Treasure.png" class="treasure"></div><div class="pathTile" id="2"><img src="./Byssormis Adventure_files/1 Treasure.png" class="treasure"></div><div class="pathTile" id="3"><img src="./Byssormis Adventure_files/1 Treasure.png" class="treasure"></div><div class="pathTile" id="4"><img src="./Byssormis Adventure_files/1 Treasure.png" class="treasure"></div><div class="pathTile" id="5"><img src="./Byssormis Adventure_files/1 Treasure.png" class="treasure"></div></div><div class="grid" id="grid2"><div class="pathTile" id="11"><img src="./Byssormis Adventure_files/2 Treasure.png" class="treasure"></div><div class="pathTile" id="10"><img src="./Byssormis Adventure_files/2 Treasure.png" class="treasure"></div><div class="pathTile" id="9"><img src="./Byssormis Adventure_files/2 Treasure.png" class="treasure"></div><div class="pathTile" id="8"><img src="./Byssormis Adventure_files/2 Treasure.png" class="treasure"></div><div class="pathTile" id="7"><img src="./Byssormis Adventure_files/2 Treasure.png" class="treasure"></div><div class="pathTile" id="6"><img src="./Byssormis Adventure_files/2 Treasure.png" class="treasure"></div></div><div class="grid" id="grid3"><div class="pathTile" id="12"><img src="./Byssormis Adventure_files/3 Treasure.png" class="treasure"></div><div class="pathTile" id="13"><img src="./Byssormis Adventure_files/3 Treasure.png" class="treasure"></div><div class="pathTile" id="14"><img src="./Byssormis Adventure_files/3 Treasure.png" class="treasure"></div><div class="pathTile" id="15"><img src="./Byssormis Adventure_files/3 Treasure.png" class="treasure"></div><div class="pathTile" id="16"><img src="./Byssormis Adventure_files/3 Treasure.png" class="treasure"></div><div class="pathTile" id="17"><img src="./Byssormis Adventure_files/3 Treasure.png" class="treasure"></div></div><div class="grid" id="grid4"><div class="pathTile" id="23"><img src="./Byssormis Adventure_files/4 Treasure.png" class="treasure"></div><div class="pathTile" id="22"><img src="./Byssormis Adventure_files/4 Treasure.png" class="treasure"></div><div class="pathTile" id="21"><img src="./Byssormis Adventure_files/4 Treasure.png" class="treasure"></div><div class="pathTile" id="20"><img src="./Byssormis Adventure_files/4 Treasure.png" class="treasure"></div><div class="pathTile" id="19"><img src="./Byssormis Adventure_files/4 Treasure.png" class="treasure"></div><div class="pathTile" id="18"><img src="./Byssormis Adventure_files/4 Treasure.png" class="treasure"></div></div></div>
+<!-- Code injected by live-server -->
+<script type="text/javascript">
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body></html>

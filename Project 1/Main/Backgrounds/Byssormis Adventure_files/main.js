@@ -1,9 +1,6 @@
 var playerArray = []
 var path = []
 var treasureArray = []
-var turnSwitcher = 0
-var setDirection = true
-var diceThrow = true
 for (i=0; i<25; i++){
     path.push(i)
     if((Math.floor(i/6)+1)<5)
@@ -32,7 +29,6 @@ startGameButton = (event) => {
     }
     $('body').css('background', "url('/Backgrounds/Underwater720.jpg')")
     $('body').css('background-repeat', "no-repeat")
-    whosTurnIsIt();
 }
 howToPlayButton = (event) => {
     $(event.currentTarget).attr('class', 'startOrHowChosen') 
@@ -52,16 +48,20 @@ class Player {
         this.abyssAdventures = 0;
         this.misAdventures = 0;
     }
+    // user function if dive true, penguin diving deeper, else penguin returning to submarine
+    diveOrReturn(){
+        this.dive = !(this.dive)
+    }
     // user functions 1. rolls die 2. calculate the no. of move that turn
     rollMovement(){
         movementGain = rollDice()
         treasureTotal = this.tier1 + this.tier2 + this.tier3 + this.tier4
         this.movement = movementGain - treasureTotal
     }
-    pickUpTreasure(){
+    dropTreasure(){
 
     }
-    dropTreasure(){
+    pickUpTreasure(){
 
     }
 }
@@ -114,52 +114,17 @@ generateTreasureArray = (treasureArray) => {
 }
 // Player turn roller 
 whosTurnIsIt = () => {
-    currentPlayer = playerArray[turnSwitcher%playerArray.length]
-    $('#announcer').text("It is " + currentPlayer.playerName + "'s turn")
+    
 }
+
 // Player option 1: Set Dive Deeper or Return
-setDiveDeep = (event) => {
-    if (currentPlayer.dive === false && setDirection === true){
-        $('#announcer').text("You can't dive deeper for this turn")
-    } 
-    if (currentPlayer.dive === true && setDirection === true){
-        $('#direction').text('Diving Deep')
-        $('#announcer').text(currentPlayer.playerName + ' is diving deep.')
-        diceThrow = true;
-    }
+setDiveDeep = (event) =>{
+    $('#direction').text('Dive Deep')
+    currentPlayer.dive = true;
 }
-setReturnSub = (event) => {
-    if (currentPlayer.position >= 0 && setDirection === true){
-        $('#direction').text('Returning to Sub')
-        $('#announcer').text(currentPlayer.playerName + ' is returning to sub.')
-        currentPlayer.dive = false
-        diceThrow = true
-    }
-    if (currentPlayer.position < 0 && setDirection === true){
-        $('#announcer').text(currentPlayer.playerName + ' is already in sub. Dive deeper')
-        diceThrow = false
-    }
-}
-// Player option 2: Roll die only
-rollDice = (event) => {
-    if (diceThrow) {
-        movementGain = Math.floor(Math.random() * 6 + 1)
-        currentPlayer.treasureTotal = currentPlayer.tier1 + currentPlayer.tier2 + currentPlayer.tier3 + currentPlayer.tier4 
-        if (currentPlayer.treasureTotal === 0){
-            $('#announcer').text(currentPlayer.playerName + ' rolled ' + movementGain)
-            currentPlayer.movement += movementGain 
-        } else {
-            $('#announcer').text(currentPlayer.playerName + ' rolled ' + movementGain + '-' + currentPlayer.treasureTotal)
-            currentPlayer.movement += movementGain - currentPlayer.treasureTotal 
-            if (currentPlayer.movement < 0){
-                currentPlayer.movement = 0;
-            }
-        }
-    } else {
-        $('#announcer').text('You already rolled '+ movementGain)
-    }
-    diceThrow = false;
-    setDirection = false;
+setReturnSub = (event) =>{
+    $('#direction').text('Return to Sub')
+    currentPlayer.dive = false;
 }
 
 const main = () => {
@@ -170,7 +135,6 @@ const main = () => {
     $('#howToPlayButton').on('click', (event) => howToPlayButton(event))
     $('#diveDeep').on('click', (event) => setDiveDeep(event))
     $('#returnSub').on('click', (event) => setReturnSub(event))
-    $('#rollDie').on('click', (event) => rollDice(event))
 }
 
 $(main);
