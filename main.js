@@ -20,7 +20,7 @@ choosePlayerButton = (event) => {
     playerCount = $(event.currentTarget).attr('players')
     $('#penguinPreview').empty()
     for (i=0; i<playerCount; i++){
-        penguinPreviews = ["/Penguins/1 Blue.png", '/Penguins/2 Red.png', '/Penguins/3 Green.png', '/Penguins/4 Yellow.png', '/Penguins/5 Black.png', '/Penguins/6 Orange.png']
+        penguinPreviews = ["./Penguins/1 Blue.png", './Penguins/2 Red.png', './Penguins/3 Green.png', './Penguins/4 Yellow.png', './Penguins/5 Black.png', './Penguins/6 Orange.png']
         $('#penguinPreview').append('<img src="' + penguinPreviews[i] + '">')
     }
 }
@@ -33,7 +33,7 @@ startGameButton = (event) => {
         generatePathDivs()
         generateTreasureArray(treasureArray)
     }
-    $('body').css('background', "url('/Backgrounds/Underwater720.jpg')")
+    $('body').css('background', "url('./Backgrounds/Underwater720.jpg')")
     $('body').css('background-repeat', "no-repeat")
     whosFirstTurn();
 }
@@ -65,7 +65,7 @@ class Player {
 // create player Objects and their board pieces (div), append to submarine
 generatePlayerDivs = (playerCount) => {
     userName = ["Blue", "Red", "Green", "Yellow", "Black"]
-    penguinPreviews = ["/Penguins/1 Blue.png", '/Penguins/2 Red.png', '/Penguins/3 Green.png', '/Penguins/4 Yellow.png', '/Penguins/5 Black.png', '/Penguins/6 Orange.png']
+    penguinPreviews = ["./Penguins/1 Blue.png", './Penguins/2 Red.png', './Penguins/3 Green.png', './Penguins/4 Yellow.png', './Penguins/5 Black.png', './Penguins/6 Orange.png']
     for(let i = 0; i<playerCount; i++){
         playerArray.push( new Player (userName[i])) // array gets new Player Obj
         $('#submarine').append($('<div>') // spawns player at submarine div
@@ -76,7 +76,7 @@ generatePlayerDivs = (playerCount) => {
             )
     }
 }
-// create the Path divs for players to travel on.
+// create the Path divs with id for players to travel on.
 generatePathDivs = () => {
     classArray = ['grid1', 'grid2', 'grid3', 'grid4']
     $gameBoard = $('#gameBoard')
@@ -98,7 +98,7 @@ generatePathDivs = () => {
 }
 // based on treasureArray, assigns the img of chest with respective tier to Path divs
 generateTreasureArray = () => {
-    treasureImg = ['', '/Treasures/1 Treasure.png', '/Treasures/2 Treasure.png', '/Treasures/3 Treasure.png', '/Treasures/4 Treasure.png']
+    treasureImg = ['', './Treasures/1 Treasure.png', './Treasures/2 Treasure.png', './Treasures/3 Treasure.png', './Treasures/4 Treasure.png']
     count = 0
     for (i of treasureArray){
         var src = document.getElementById(path[count])
@@ -230,15 +230,9 @@ pickTreasure = () => {
     if(actionTurn && treasureHere !== 0){
         if(actionTurn){
             currentPlayer.treasurePouch.push(treasureHere)
-            console.log(treasureHere)
-            treasureImg = ['', '/Treasures/1 Treasure.png', '/Treasures/2 Treasure.png', '/Treasures/3 Treasure.png', '/Treasures/4 Treasure.png']
-            $playerID = document.getElementById(currentPlayer.playerName)
-            imgAppend = document.createElement("img")
-            imgAppend.src = treasureImg[treasureHere]
-            imgAppend.id = "playerPouch" + treasureHere
             treasureArray[currentPlayer.position] = 0
             generateTreasureArray();
-            $playerID.appendChild(imgAppend)
+            renderCurrentPlayer();
             if(lastTurn){
                 newRound()
             }
@@ -261,10 +255,20 @@ dropTreasure = () => {
         $('#announcer').text('Your pouch is empty..')
         actionTurn = true
     } else {
+
+
+
         currentPlayer.treasurePouch.sort()
         treasureDrop = currentPlayer.treasurePouch.shift()
         treasureArray[currentPlayer.position] = treasureDrop
         generateTreasureArray()
+        // $player = document.getElementById(currentPlayer.playerName)
+        // //.getElementById("playerPouch" + treasureDrop)
+        // // imgRemove = $playerID.getElementsByClassName("playerPouch" + treasureDrop)
+        // removeTreasure = '.playerPouch' + treasureDrop
+        // test = $($player).children().find(removeTreasure)
+        // $(test).remove()
+        renderCurrentPlayer();
         if (lastTurn){
             newRound()
         } else {
@@ -272,6 +276,14 @@ dropTreasure = () => {
         }
     }
 } 
+renderCurrentPlayer = () => {
+    treasureImg = ['', './Treasures/1 Treasure.png', './Treasures/2 Treasure.png', './Treasures/3 Treasure.png', './Treasures/4 Treasure.png']
+    $player = currentPlayer.playerName
+    $("#" + $player).empty()
+    for (i of currentPlayer.treasurePouch){
+        $("#"+$player).append($("<img>").attr('src', treasureImg[i]))
+    }
+}
 doNothing = (event) => {
     if (lastTurn)
         newRound()

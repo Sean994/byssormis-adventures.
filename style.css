@@ -1,5 +1,5 @@
 body {
-    background: url('/Backgrounds/Beachfront.jpg');
+    background: url('./Backgrounds/Beachfront.jpg');
     background-size: 1280px 720px;
     width: 1280px;
     height: 720px;
@@ -156,9 +156,11 @@ body {
     background-color: transparent;
     min-width: 120px;
     z-index: 1;
+    
 }
 .dropdown:hover .dropdown-content {
     display: block;
+    
 }
 /* Gameboard: Treasure and Path */
 #submarine {
