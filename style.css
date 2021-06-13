@@ -61,7 +61,7 @@ body {
     font-weight: bold;
     font-size: 50px;
     padding: 12px;
-    border-radius: 5px;
+    border-radius: 13px;
     border: black solid 2px;
     color: black;
     background-image: linear-gradient(dodgerblue, dodgerblue), linear-gradient(darkorange, orange);
@@ -230,4 +230,13 @@ grid-template-columns: repeat(6,100px)
 .penguins img{
     width: 26px;
     height: auto;
+}
+
+audio{
+    display: inline-flex;
+    position: sticky;
+    position: -webkit-sticky;
+    /* left: 2%; */
+    top: 90%;
+    width: 110px;
 }
