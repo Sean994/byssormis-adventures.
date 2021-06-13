@@ -62,7 +62,7 @@ class Player {
 
     }
 }
-// create player Objects and their board pieces (div)
+// create player Objects and their board pieces (div), append to submarine
 generatePlayerDivs = (playerCount) => {
     userName = ["Blue", "Red", "Green", "Yellow", "Black"]
     penguinPreviews = ["/Penguins/1 Blue.png", '/Penguins/2 Red.png', '/Penguins/3 Green.png', '/Penguins/4 Yellow.png', '/Penguins/5 Black.png', '/Penguins/6 Orange.png']
@@ -76,6 +76,7 @@ generatePlayerDivs = (playerCount) => {
             )
     }
 }
+// create the Path divs for players to travel on.
 generatePathDivs = () => {
     classArray = ['grid1', 'grid2', 'grid3', 'grid4']
     $gameBoard = $('#gameBoard')
@@ -95,7 +96,7 @@ generatePathDivs = () => {
         adder += 6
     }
 }
-// based on treasureArray, assigns the img of chest with respective tier to treasure divs
+// based on treasureArray, assigns the img of chest with respective tier to Path divs
 generateTreasureArray = () => {
     treasureImg = ['', '/Treasures/1 Treasure.png', '/Treasures/2 Treasure.png', '/Treasures/3 Treasure.png', '/Treasures/4 Treasure.png']
     count = 0
@@ -104,13 +105,14 @@ generateTreasureArray = () => {
         var img = document.createElement("img")
         img.src = treasureImg[i]
         img.className = 'treasure'
-        img.id = 'treasure' + count
+        // img.id = 'treasure' + count
         if(treasureImg[i] !== ''){
+            treasureRefresh = src.getElementsByClassName('treasure')
+            $(treasureRefresh).remove()
             src.appendChild(img)
         } else {
-            tr = src.getElementsByTagName('img')
-            console.log (tr)
-            $(tr).remove()
+            treasureRemove = src.getElementsByClassName('treasure')
+            $(treasureRemove).remove()
             // src.remove(treasureRemove)
             // src.removeChild(src.lastChild)
         }
@@ -154,17 +156,16 @@ setReturnSub = (event) => {
 rollDice = (event) => {
     if (diceThrow) {
         movementGain = Math.floor(Math.random() * 6 + 1)
-        console.log('dice rolled', movementGain)
         treasureTotal = currentPlayer.treasurePouch.length
         if (treasureTotal === 0){
             currentPlayer.movement += movementGain 
         } else {
             currentPlayer.movement += movementGain - treasureTotal 
             console.log('dice rolled', movementGain, 'minus', treasureTotal)
-            if (currentPlayer.movement < 0){
+            if (currentPlayer.movement <= 0){
                 currentPlayer.movement = 0;
-                $('#announcer').text(currentPlayer.playerName + "'s treasures felt too heavy")
-                switchPlayer();
+                $('#announcer').text(currentPlayer.playerName + "'s too heavy. Choose action")
+                actionTurn = true
             }
         }
     }
@@ -179,7 +180,7 @@ rollDice = (event) => {
 }
 divePlayer = () => {
     setDirection = false;
-    while (currentPlayer.movement != 0){
+    while (currentPlayer.movement != 0 && currentPlayer.position < 24){
         currentPlayer.movement --
         currentPlayer.position ++
         renderPath = '#' + currentPlayer.position
@@ -187,10 +188,14 @@ divePlayer = () => {
         if ($(renderPath).children().hasClass('penguins')){
             currentPlayer.movement++
         }
+        if (currentPlayer.position === 23){   
+            currentPlayer.movement = 0
+            console.log("congrats")
+        }
         renderPlayer = $('#' + currentPlayer.playerName)
         $(renderPath).prepend(renderPlayer)
     }
-    $('#announcer').text('Landed at tile ' +(currentPlayer.position+1)+', choose action.')
+    $('#announcer').text('Landed at tile ' +(currentPlayer.position + 1)+', choose action.')
     actionTurn = true;
 }
 returnPlayer = () => {
@@ -208,7 +213,7 @@ returnPlayer = () => {
         $('#announcer').text('Landed at tile ' +(currentPlayer.position+1)+', choose action.')
         if (currentPlayer.position === -1){
             $('#submarine').prepend(renderPlayer)
-            $('#announcer').text(currentPlayer.playerName + ' returned safely to the submarine!')
+            $('#announcer').text(currentPlayer.playerName + ' returned safely!')
             currentPlayer.movement = 0
             currentPlayer.returned = true;
             returnedPlayer ++
@@ -225,9 +230,15 @@ pickTreasure = () => {
     if(actionTurn && treasureHere !== 0){
         if(actionTurn){
             currentPlayer.treasurePouch.push(treasureHere)
-            $('#announcer').text(currentPlayer.playerName + ' found a tier ' + treasureHere + ' treasure!')
+            console.log(treasureHere)
+            treasureImg = ['', '/Treasures/1 Treasure.png', '/Treasures/2 Treasure.png', '/Treasures/3 Treasure.png', '/Treasures/4 Treasure.png']
+            $playerID = document.getElementById(currentPlayer.playerName)
+            imgAppend = document.createElement("img")
+            imgAppend.src = treasureImg[treasureHere]
+            imgAppend.id = "playerPouch" + treasureHere
             treasureArray[currentPlayer.position] = 0
             generateTreasureArray();
+            $playerID.appendChild(imgAppend)
             if(lastTurn){
                 newRound()
             }
@@ -239,10 +250,28 @@ pickTreasure = () => {
     }
 }
 dropTreasure = () => {
-    actionTurn = false;
-    if (lastTurn)
-        newRound()
-}
+    var temp = treasureArray[currentPlayer.position]
+    if (currentPlayer.treasurePouch.length === 0){
+        $('#announcer').text('Your pouch is empty..')
+        actionTurn = true
+    } else if (temp > 0){
+        $('#announcer').text('There is already existing treasure!')
+        actionTurn = true
+    } else if (currentPlayer.treasurePouch.length === 0){
+        $('#announcer').text('Your pouch is empty..')
+        actionTurn = true
+    } else {
+        currentPlayer.treasurePouch.sort()
+        treasureDrop = currentPlayer.treasurePouch.shift()
+        treasureArray[currentPlayer.position] = treasureDrop
+        generateTreasureArray()
+        if (lastTurn){
+            newRound()
+        } else {
+        switchPlayer()
+        }
+    }
+} 
 doNothing = (event) => {
     if (lastTurn)
         newRound()
@@ -270,13 +299,11 @@ switchPlayer = () => {
         switchPlayer()
     }
 }
-
 airSupplyTurn = (player, treasure) => {
-    alert(player.playerName, 'is holding', treasure,'treasures. Air supply minus by', treasure)
     airSupply -= treasure
     if (airSupply > 0 ){
         $('#airSupply').text("Air Supply: " + airSupply)
-        alert('Current air supply is ' + airSupply + ' good luck')
+        alert(player.playerName + ' is holding ' + treasure +' treasures. Air supply minus by '+ treasure + '. Current air supply is ' + airSupply + ' good luck')
     } else {
         alert('Air supply ran out!! This is the last turn of the round')
         lastTurn = true;

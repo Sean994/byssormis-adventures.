@@ -216,7 +216,6 @@ grid-template-columns: repeat(6,100px)
     transform: translateX(30px);
     top: 80px;
 }
-
 .penguins {
     display: inline-block;
     width: 80px;
@@ -226,6 +225,7 @@ grid-template-columns: repeat(6,100px)
     background-position-x: center;
     background-position-y: bottom;
 }
-/* .penguins img{
-
-} */
+.penguins img{
+    width: 26px;
+    height: auto;
+}
