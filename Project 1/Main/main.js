@@ -76,7 +76,7 @@ generatePlayerDivs = (playerCount) => {
             )
     }
 }
-// create the Path divs for players to travel on.
+// create the Path divs with id for players to travel on.
 generatePathDivs = () => {
     classArray = ['grid1', 'grid2', 'grid3', 'grid4']
     $gameBoard = $('#gameBoard')
@@ -230,15 +230,9 @@ pickTreasure = () => {
     if(actionTurn && treasureHere !== 0){
         if(actionTurn){
             currentPlayer.treasurePouch.push(treasureHere)
-            console.log(treasureHere)
-            treasureImg = ['', '/Treasures/1 Treasure.png', '/Treasures/2 Treasure.png', '/Treasures/3 Treasure.png', '/Treasures/4 Treasure.png']
-            $playerID = document.getElementById(currentPlayer.playerName)
-            imgAppend = document.createElement("img")
-            imgAppend.src = treasureImg[treasureHere]
-            imgAppend.id = "playerPouch" + treasureHere
             treasureArray[currentPlayer.position] = 0
             generateTreasureArray();
-            $playerID.appendChild(imgAppend)
+            renderCurrentPlayer();
             if(lastTurn){
                 newRound()
             }
@@ -261,10 +255,20 @@ dropTreasure = () => {
         $('#announcer').text('Your pouch is empty..')
         actionTurn = true
     } else {
+
+
+
         currentPlayer.treasurePouch.sort()
         treasureDrop = currentPlayer.treasurePouch.shift()
         treasureArray[currentPlayer.position] = treasureDrop
         generateTreasureArray()
+        // $player = document.getElementById(currentPlayer.playerName)
+        // //.getElementById("playerPouch" + treasureDrop)
+        // // imgRemove = $playerID.getElementsByClassName("playerPouch" + treasureDrop)
+        // removeTreasure = '.playerPouch' + treasureDrop
+        // test = $($player).children().find(removeTreasure)
+        // $(test).remove()
+        renderCurrentPlayer();
         if (lastTurn){
             newRound()
         } else {
@@ -272,6 +276,14 @@ dropTreasure = () => {
         }
     }
 } 
+renderCurrentPlayer = () => {
+    treasureImg = ['', '/Treasures/1 Treasure.png', '/Treasures/2 Treasure.png', '/Treasures/3 Treasure.png', '/Treasures/4 Treasure.png']
+    $player = currentPlayer.playerName
+    $("#" + $player).empty()
+    for (i of currentPlayer.treasurePouch){
+        $("#"+$player).append($("<img>").attr('src', treasureImg[i]))
+    }
+}
 doNothing = (event) => {
     if (lastTurn)
         newRound()

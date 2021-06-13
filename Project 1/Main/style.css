@@ -156,9 +156,11 @@ body {
     background-color: transparent;
     min-width: 120px;
     z-index: 1;
+    
 }
 .dropdown:hover .dropdown-content {
     display: block;
+    
 }
 /* Gameboard: Treasure and Path */
 #submarine {
