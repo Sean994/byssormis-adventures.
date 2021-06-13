@@ -15,16 +15,18 @@ for (i=0; i<24; i++){
     treasureArray.push(Math.floor(i/6)+1)
 }
 choosePlayerButton = (event) => {
+    clickSound.play()
     $('.chosen').attr('class', 'choosePlayers')
     $(event.currentTarget).attr('class', 'chosen')
     playerCount = $(event.currentTarget).attr('players')
     $('#penguinPreview').empty()
     for (i=0; i<playerCount; i++){
-        penguinPreviews = ["/Penguins/1 Blue.png", '/Penguins/2 Red.png', '/Penguins/3 Green.png', '/Penguins/4 Yellow.png', '/Penguins/5 Black.png', '/Penguins/6 Orange.png']
+        penguinPreviews = ["./Penguins/1 Blue.png", './Penguins/2 Red.png', './Penguins/3 Green.png', './Penguins/4 Yellow.png', './Penguins/5 Black.png', './Penguins/6 Orange.png']
         $('#penguinPreview').append('<img src="' + penguinPreviews[i] + '">')
     }
 }
 startGameButton = (event) => {
+    clickSound.play()  
     if (playerCount){
         $(event.currentTarget).attr('class', 'startOrHowChosen')
         $('#landingPage').hide()
@@ -33,11 +35,14 @@ startGameButton = (event) => {
         generatePathDivs()
         generateTreasureArray(treasureArray)
     }
-    $('body').css('background', "url('/Backgrounds/Underwater720.jpg')")
+    $('body').css('background', "url('./Backgrounds/Underwater720.jpg')")
     $('body').css('background-repeat', "no-repeat")
     whosFirstTurn();
+    document.getElementById("audio").src = "./Audio/Blue World.mp3"
+    audio.muted = false;
 }
 howToPlayButton = (event) => {
+    clickSound.play()
     $(event.currentTarget).attr('class', 'startOrHowChosen') 
     // bring up howToPlay div
 }
@@ -65,7 +70,7 @@ class Player {
 // create player Objects and their board pieces (div), append to submarine
 generatePlayerDivs = (playerCount) => {
     userName = ["Blue", "Red", "Green", "Yellow", "Black"]
-    penguinPreviews = ["/Penguins/1 Blue.png", '/Penguins/2 Red.png', '/Penguins/3 Green.png', '/Penguins/4 Yellow.png', '/Penguins/5 Black.png', '/Penguins/6 Orange.png']
+    penguinPreviews = ["./Penguins/1 Blue.png", './Penguins/2 Red.png', './Penguins/3 Green.png', './Penguins/4 Yellow.png', './Penguins/5 Black.png', './Penguins/6 Orange.png']
     for(let i = 0; i<playerCount; i++){
         playerArray.push( new Player (userName[i])) // array gets new Player Obj
         $('#submarine').append($('<div>') // spawns player at submarine div
@@ -98,7 +103,7 @@ generatePathDivs = () => {
 }
 // based on treasureArray, assigns the img of chest with respective tier to Path divs
 generateTreasureArray = () => {
-    treasureImg = ['', '/Treasures/1 Treasure.png', '/Treasures/2 Treasure.png', '/Treasures/3 Treasure.png', '/Treasures/4 Treasure.png']
+    treasureImg = ['', './Treasures/1 Treasure.png', './Treasures/2 Treasure.png', './Treasures/3 Treasure.png', './Treasures/4 Treasure.png']
     count = 0
     for (i of treasureArray){
         var src = document.getElementById(path[count])
@@ -131,6 +136,7 @@ whosFirstTurn = () => {
 }
 // Player option 1: Set Dive Deeper or Return
 setDiveDeep = (event) => {
+    clickSound.play()
     if (currentPlayer.dive === false && setDirection === true){
         $('#announcer').text("You can't dive deeper for this turn")
     } 
@@ -141,6 +147,7 @@ setDiveDeep = (event) => {
     }
 }
 setReturnSub = (event) => {
+    clickSound.play()
     if (currentPlayer.position >= 0 && setDirection === true){
         $('#direction').text('Returning to Sub')
         $('#announcer').text(currentPlayer.playerName + ' is returning to sub.')
@@ -154,6 +161,7 @@ setReturnSub = (event) => {
 }
 // Player option 2: Roll die only
 rollDice = (event) => {
+    clickSound.play()
     if (diceThrow) {
         movementGain = Math.floor(Math.random() * 6 + 1)
         treasureTotal = currentPlayer.treasurePouch.length
@@ -164,7 +172,7 @@ rollDice = (event) => {
             console.log('dice rolled', movementGain, 'minus', treasureTotal)
             if (currentPlayer.movement <= 0){
                 currentPlayer.movement = 0;
-                $('#announcer').text(currentPlayer.playerName + "'s too heavy. Choose action")
+                $('#announcer').text(currentPlayer.playerName + " felt heavy. Choose action.")
                 actionTurn = true
             }
         }
@@ -226,9 +234,11 @@ returnPlayer = () => {
     actionTurn = true;
 }
 pickTreasure = () => {
+    clickSound.play()
     treasureHere = treasureArray[currentPlayer.position]
     if(actionTurn && treasureHere !== 0){
         if(actionTurn){
+            pickSound.play()
             currentPlayer.treasurePouch.push(treasureHere)
             treasureArray[currentPlayer.position] = 0
             generateTreasureArray();
@@ -244,6 +254,7 @@ pickTreasure = () => {
     }
 }
 dropTreasure = () => {
+    clickSound.play()
     var temp = treasureArray[currentPlayer.position]
     if (currentPlayer.treasurePouch.length === 0){
         $('#announcer').text('Your pouch is empty..')
@@ -255,9 +266,6 @@ dropTreasure = () => {
         $('#announcer').text('Your pouch is empty..')
         actionTurn = true
     } else {
-
-
-
         currentPlayer.treasurePouch.sort()
         treasureDrop = currentPlayer.treasurePouch.shift()
         treasureArray[currentPlayer.position] = treasureDrop
@@ -277,7 +285,7 @@ dropTreasure = () => {
     }
 } 
 renderCurrentPlayer = () => {
-    treasureImg = ['', '/Treasures/1 Treasure.png', '/Treasures/2 Treasure.png', '/Treasures/3 Treasure.png', '/Treasures/4 Treasure.png']
+    treasureImg = ['', './Treasures/1 Treasure.png', './Treasures/2 Treasure.png', './Treasures/3 Treasure.png', './Treasures/4 Treasure.png']
     $player = currentPlayer.playerName
     $("#" + $player).empty()
     for (i of currentPlayer.treasurePouch){
@@ -285,6 +293,7 @@ renderCurrentPlayer = () => {
     }
 }
 doNothing = (event) => {
+    clickSound.play()
     if (lastTurn)
         newRound()
     if (actionTurn)
@@ -316,7 +325,9 @@ airSupplyTurn = (player, treasure) => {
     if (airSupply > 0 ){
         $('#airSupply').text("Air Supply: " + airSupply)
         alert(player.playerName + ' is holding ' + treasure +' treasures. Air supply minus by '+ treasure + '. Current air supply is ' + airSupply + ' good luck')
+        bubbleSound.play()
     } else {
+        bubbleSound.play()
         alert('Air supply ran out!! This is the last turn of the round')
         lastTurn = true;
     }
@@ -334,6 +345,24 @@ airSupplyTurn = (player, treasure) => {
 //     // link back to whosTurnIsIt()
 // }
 
+
+class audioEffect{
+    constructor(source){
+    this.sound = document.createElement("audio");
+    this.sound.src = source;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    }
+    play(){
+      this.sound.play();
+    }
+    stop(){
+      this.sound.pause();
+    }
+  }
+
 const main = () => {
     $('#gameBoard').hide()
     // $('#howToPlayBoard').hide()
@@ -346,6 +375,16 @@ const main = () => {
     $('#pickTreasure').on('click', (event) => pickTreasure(event))
     $('#dropTreasure').on('click', (event) => dropTreasure(event))
     $('#doNothingButton').on('click', (event) => doNothing(event))
+    audio.muted = false;
+    audio.volume = 0.4;
+    clickSound = new audioEffect('./Audio/Click.wav')
+    hoverSound = new audioEffect('./Audio/Hover.wav')
+    pickSound = new audioEffect('./Audio/PickUp.wav')
+    bubbleSound = new audioEffect('./Audio/Bubble.wav')
+    $(".choosePlayers").mouseenter((event) => hoverSound.play(event))
+    $(".startOrHow").mouseenter((event) => hoverSound.play(event))
+    $("#utilityList div").mouseenter((event) => hoverSound.play(event))
+    $("#utilityList button").mouseenter((event) => hoverSound.play(event))
 }
 
 $(main);

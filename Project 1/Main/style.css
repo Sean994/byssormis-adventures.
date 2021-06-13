@@ -1,5 +1,5 @@
 body {
-    background: url('/Backgrounds/Beachfront.jpg');
+    background: url('./Backgrounds/Beachfront.jpg');
     background-size: 1280px 720px;
     width: 1280px;
     height: 720px;
@@ -61,7 +61,7 @@ body {
     font-weight: bold;
     font-size: 50px;
     padding: 12px;
-    border-radius: 5px;
+    border-radius: 13px;
     border: black solid 2px;
     color: black;
     background-image: linear-gradient(dodgerblue, dodgerblue), linear-gradient(darkorange, orange);
@@ -164,7 +164,7 @@ body {
 }
 /* Gameboard: Treasure and Path */
 #submarine {
-    background: url('/Backgrounds/submarine.png');
+    background: url('./Backgrounds/submarine.png');
     background-size: 62% auto;
     background-repeat: no-repeat; 
     background-position: 37px 46px;
@@ -205,7 +205,7 @@ grid-template-columns: repeat(6,100px)
 .pathTile{
     width: 100px;
     height: 140px;
-    background: url('/Backgrounds/platform.png');
+    background: url('./Backgrounds/platform.png');
     background-repeat: no-repeat;
     background-size: 90px 50px;
     background-position-y: bottom;
@@ -230,4 +230,13 @@ grid-template-columns: repeat(6,100px)
 .penguins img{
     width: 26px;
     height: auto;
+}
+
+audio{
+    display: inline-flex;
+    position: sticky;
+    position: -webkit-sticky;
+    /* left: 2%; */
+    top: 90%;
+    width: 110px;
 }
