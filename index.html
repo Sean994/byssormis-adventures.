@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="main.js"></script>
+    <title>Byssormis Adventure</title>
+</head>
+<body>
+    <div id='landingPage'>   
+         <h1 class='gameTitle'>BYSSORMIS ADVENTURES</h1>
+         <h3 class='gameTitle'>Choose number of players</h3>
+         <div id='playerNumberChoices'>
+            <button players = '1' class='choosePlayers'>Single Player</button>
+            <button players = '2' class='choosePlayers'>2 Players</button>
+            <button players = '3' class='choosePlayers'>3 Players</button>
+            <button players = '4' class='choosePlayers'>4 Players</button>
+            <button players = '5' class='choosePlayers'>5 Players</button>
+            <button players = '6' class='choosePlayers'>6 Players</button>
+        </div>
+        <div id='penguinPreview'>
+            <img src="/Penguins/1 Blue.png">
+            <img src='/Penguins/2 Red.png'>
+            <img src='/Penguins/3 Green.png'>
+            <img src='/Penguins/4 Yellow.png'>
+            <img src='/Penguins/5 Black.png'>
+            <img src='/Penguins/6 Orange.png'>
+        </div>
+            <button class='startOrHow' id='startGameButton'>Start Game</button>
+            <button class='startOrHow' id='howToPlayButton'>How to play</button>
+    </div>
+    <div id='gameBoard'>
+        <div id='utilityList'>
+            <div id='airSupply' class='gameInfo'>
+                    AIR SUPPLY: 25
+            </div>
+            <div id='announcer' class='gameInfo'>
+                Im announcer
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn" id='direction'>Set direction</button>
+                <div class="dropdown-content">
+                    <button id='diveDeep'>Dive Deep</button>
+                    <button id='returnSub'>Return to Sub</button>
+                </div>
+            </div>
+            <button id='rollDie'>Roll Dice</button>  
+            <div class="dropdown">
+                <button class="dropbtn" id='tileAction'>Action</button>
+                <div class="dropdown-content">
+                    <button id='pickTreasure'>Pick up treasure</button>
+                    <button id='dropTreasure'>Drop treasure</button>
+                    <button id='doNothingButton'>Do nothing</button>
+                </div>
+            </div>             
+            <button id='scoreBoardButton'>Scoreboard</button>
+        </div>
+        <div id='submarine'>           
+        </div>
+    </div>
+</body>
+</html>
