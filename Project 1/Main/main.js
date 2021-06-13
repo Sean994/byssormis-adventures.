@@ -2,17 +2,17 @@ var playerArray = []
 var movementGain = 0
 var path = []
 var treasureArray = []
+var airSupply = 25
 var turnSwitcher = 0
 var setDirection = true
 var diceThrow = false
 var actionTurn = false
 var returnedPlayer = 0
-for (i=0; i<25; i++){
+var lastTurn = false
+for (i=0; i<24; i++){
     path.push(i)
     if((Math.floor(i/6)+1)<5)
     treasureArray.push(Math.floor(i/6)+1)
-    else
-    treasureArray.push(0)
 }
 choosePlayerButton = (event) => {
     $('.chosen').attr('class', 'choosePlayers')
@@ -35,7 +35,7 @@ startGameButton = (event) => {
     }
     $('body').css('background', "url('/Backgrounds/Underwater720.jpg')")
     $('body').css('background-repeat', "no-repeat")
-    whosTurnIsIt();
+    whosFirstTurn();
 }
 howToPlayButton = (event) => {
     $(event.currentTarget).attr('class', 'startOrHowChosen') 
@@ -45,10 +45,7 @@ class Player {
     constructor(name){
         this.playerName = name;
         this.score = 0;
-        this.tier1 = 0;
-        this.tier2 = 0;
-        this.tier3 = 0;
-        this.tier4 = 0;
+        this.treasurePouch = []
         this.movement = 0;
         this.position = -1;
         this.dive = true;
@@ -60,9 +57,6 @@ class Player {
     diveOne(){
         this.movement -= 1;
         this.position +- 1;
-    }
-    pickUpTreasure(){
-
     }
     dropTreasure(){
 
@@ -102,7 +96,7 @@ generatePathDivs = () => {
     }
 }
 // based on treasureArray, assigns the img of chest with respective tier to treasure divs
-generateTreasureArray = (treasureArray) => {
+generateTreasureArray = () => {
     treasureImg = ['', '/Treasures/1 Treasure.png', '/Treasures/2 Treasure.png', '/Treasures/3 Treasure.png', '/Treasures/4 Treasure.png']
     count = 0
     for (i of treasureArray){
@@ -111,16 +105,23 @@ generateTreasureArray = (treasureArray) => {
         img.src = treasureImg[i]
         img.className = 'treasure'
         img.id = 'treasure' + count
-        if(treasureImg[i] !== '')
+        if(treasureImg[i] !== ''){
             src.appendChild(img)
+        } else {
+            tr = src.getElementsByTagName('img')
+            console.log (tr)
+            $(tr).remove()
+            // src.remove(treasureRemove)
+            // src.removeChild(src.lastChild)
+        }
         count++
     }
 }
 // Player turn roller 
-whosTurnIsIt = () => {
+whosFirstTurn = () => {
     turnSwitcher = 0
     currentPlayer = playerArray[turnSwitcher%playerArray.length]
-    $('#announcer').text("It is " + currentPlayer.playerName + "'s turn")
+    $('#announcer').text(currentPlayer.playerName + "'s turn. Dive deep!")
     // interval 2s
     // currentPlayer has N Treasures
     // interval 2s
@@ -153,14 +154,17 @@ setReturnSub = (event) => {
 rollDice = (event) => {
     if (diceThrow) {
         movementGain = Math.floor(Math.random() * 6 + 1)
-        currentPlayer.treasureTotal = currentPlayer.tier1 + currentPlayer.tier2 + currentPlayer.tier3 + currentPlayer.tier4 
-        if (currentPlayer.treasureTotal === 0){
+        console.log('dice rolled', movementGain)
+        treasureTotal = currentPlayer.treasurePouch.length
+        if (treasureTotal === 0){
             currentPlayer.movement += movementGain 
         } else {
-            currentPlayer.movement += movementGain - currentPlayer.treasureTotal 
+            currentPlayer.movement += movementGain - treasureTotal 
+            console.log('dice rolled', movementGain, 'minus', treasureTotal)
             if (currentPlayer.movement < 0){
                 currentPlayer.movement = 0;
-                $('#announcer').text('Your treasure felt too heavy')
+                $('#announcer').text(currentPlayer.playerName + "'s treasures felt too heavy")
+                switchPlayer();
             }
         }
     }
@@ -208,25 +212,42 @@ returnPlayer = () => {
             currentPlayer.movement = 0
             currentPlayer.returned = true;
             returnedPlayer ++
+            for (i of currentPlayer.treasurePouch){
+                console.log('treasure', i)
+            }
             switchPlayer()
         }
     }   
     actionTurn = true;
 }
 pickTreasure = () => {
-    actionTurn = false;
-    $('#announcer').text('Landed at tile ' +(currentPlayer.position+1)+', choose action.')
+    treasureHere = treasureArray[currentPlayer.position]
+    if(actionTurn && treasureHere !== 0){
+        if(actionTurn){
+            currentPlayer.treasurePouch.push(treasureHere)
+            $('#announcer').text(currentPlayer.playerName + ' found a tier ' + treasureHere + ' treasure!')
+            treasureArray[currentPlayer.position] = 0
+            generateTreasureArray();
+            if(lastTurn){
+                newRound()
+            }
+            switchPlayer()
+        }
+    } else {
+        $('#announcer').text('No treasure found.. Do something else')
+        actionTurn = true;
+    }
 }
 dropTreasure = () => {
     actionTurn = false;
-    currentPlayer.tier1 = 1
-    currentPlayer.tier2 = 3
-    currentPlayer.tier4 = 2
+    if (lastTurn)
+        newRound()
 }
 doNothing = (event) => {
+    if (lastTurn)
+        newRound()
     if (actionTurn)
         switchPlayer()
-    actionTurn = false;
 }
 switchPlayer = () => {
     if (returnedPlayer === playerArray.length){
@@ -234,7 +255,13 @@ switchPlayer = () => {
     }
     turnSwitcher ++
     currentPlayer = playerArray[(turnSwitcher%playerArray.length)]
-    $('#announcer').text("It is " + currentPlayer.playerName + "'s turn")
+    treasureCount = currentPlayer.treasurePouch.length
+
+    if (treasureCount>0){
+    airSupplyTurn(currentPlayer, treasureCount);
+    }
+    
+    $('#announcer').text(currentPlayer.playerName + "'s turn. Choose direction")
     $('#direction').text('Set direction')
     actionTurn = false;
     setDirection = true;
@@ -244,15 +271,29 @@ switchPlayer = () => {
     }
 }
 
-newRound = () => {
-    for (i=0; i<playerArray.length; i++){
-        playerArray[i].returned = false;
+airSupplyTurn = (player, treasure) => {
+    alert(player.playerName, 'is holding', treasure,'treasures. Air supply minus by', treasure)
+    airSupply -= treasure
+    if (airSupply > 0 ){
+        $('#airSupply').text("Air Supply: " + airSupply)
+        alert('Current air supply is ' + airSupply + ' good luck')
+    } else {
+        alert('Air supply ran out!! This is the last turn of the round')
+        lastTurn = true;
     }
-    // convert treasure into score
-    // sort playerArray by object key value (playerArray[i].score)
-    console.log('round end!')
-    alert('round end')
 }
+
+// newRound = () => {
+//     for (i=0; i<playerArray.length; i++){
+//         playerArray[i].returned = false;
+//     }
+//     lastTurn = false
+//     // convert treasure into score
+//     alert('round end and show scoreBoard div')
+//     // sort playerArray by object key value (playerArray[i].score)
+//     airSupply = 25
+//     // link back to whosTurnIsIt()
+// }
 
 const main = () => {
     $('#gameBoard').hide()
