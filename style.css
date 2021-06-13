@@ -164,7 +164,7 @@ body {
 }
 /* Gameboard: Treasure and Path */
 #submarine {
-    background: url('/Backgrounds/submarine.png');
+    background: url('./Backgrounds/submarine.png');
     background-size: 62% auto;
     background-repeat: no-repeat; 
     background-position: 37px 46px;
@@ -205,7 +205,7 @@ grid-template-columns: repeat(6,100px)
 .pathTile{
     width: 100px;
     height: 140px;
-    background: url('/Backgrounds/platform.png');
+    background: url('./Backgrounds/platform.png');
     background-repeat: no-repeat;
     background-size: 90px 50px;
     background-position-y: bottom;
