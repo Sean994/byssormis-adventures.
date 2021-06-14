@@ -177,7 +177,7 @@ body {
 display: inline-grid;
 width: 600px;
 height: 140px;
-grid-template-columns: repeat(6,100px)
+grid-template-columns: repeat(7,100px)
 }
 #grid1 {
     position: absolute;
@@ -243,6 +243,6 @@ audio{
     position: sticky;
     position: -webkit-sticky;
     /* left: 2%; */
-    top: 90%;
-    width: 110px;
+    top: 88%;
+    width: 200px;
 }

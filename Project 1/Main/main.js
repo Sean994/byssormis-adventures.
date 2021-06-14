@@ -9,10 +9,12 @@ var diceThrow = false
 var actionTurn = false
 var returnedPlayer = 0
 var lastTurn = false
-for (i=0; i<24; i++){
-    path.push(i)
-    if((Math.floor(i/6)+1)<5)
-    treasureArray.push(Math.floor(i/6)+1)
+var roundsOver = 0
+// prepares array: path and treasureArray for first render
+for (i=0; i<28; i++){
+    path.push(i) //
+    if((Math.floor(i/7)+1)<6)
+    treasureArray.push(Math.floor(i/7)+1)
 }
 choosePlayerButton = (event) => {
     clickSound.play()
@@ -58,7 +60,7 @@ class Player {
         this.abyssAdventures = 0;
         this.misAdventures = 0;
     }
-    treasureToScore(){
+treasureToScore(){
         var treasureConvert = 0
         var scoreAdd = 0
         for (let i = 0; i<this.treasurePouch.length; i++){
@@ -105,16 +107,16 @@ generatePathDivs = () => {
     for (i=0; i<4; i++){
         $grid = $('<div>').addClass('grid').attr('id', 'grid'+(i+1))
         $gameBoard.append($grid)
-        for (j=0; j<6; j++){
+        for (j=0; j<7; j++){
             if (i===0 || i===2)
             $pathTile = $('<div>').addClass('pathTile').attr('id', j+adder)
             if (i===1)
-            $pathTile = $('<div>').addClass('pathTile').attr('id', 11-j)
+            $pathTile = $('<div>').addClass('pathTile').attr('id', 13-j)
             if (i===3)
-            $pathTile = $('<div>').addClass('pathTile').attr('id', 23-j)
+            $pathTile = $('<div>').addClass('pathTile').attr('id', 27-j)
             $grid.append($pathTile)
         }
-        adder += 6
+        adder += 7
     }
 }
 // based on treasureArray, assigns the img of chest with respective tier to Path divs
@@ -142,13 +144,13 @@ generateTreasureArray = () => {
 }
 // Player turn roller 
 whosFirstTurn = () => {
-    turnSwitcher = 0
-    currentPlayer = playerArray[turnSwitcher%playerArray.length]
+    currentPlayer = playerArray[0]
     $('#announcer').text(currentPlayer.playerName + "'s turn. Dive deep!")
     setDirection = true;
     airSupply = 25
     diceThrow = false
     actionTurn = false
+    lastTurn = false;
     // interval 2s
     // currentPlayer has N Treasures
     // interval 2s
@@ -323,22 +325,23 @@ doNothing = (event) => {
 switchPlayer = () => {
     if (returnedPlayer === playerArray.length){
         newRound()
-    }
-    turnSwitcher ++
-    currentPlayer = playerArray[(turnSwitcher%playerArray.length)]
-    treasureCount = currentPlayer.treasurePouch.length
+    } else {
+        turnSwitcher ++
+        currentPlayer = playerArray[(turnSwitcher%playerArray.length)]
+        treasureCount = currentPlayer.treasurePouch.length
 
-    if (treasureCount>0){
-    airSupplyTurn(currentPlayer, treasureCount);
-    }
-    
-    $('#announcer').text(currentPlayer.playerName + "'s turn. Choose direction")
-    $('#direction').text('Set direction')
-    actionTurn = false;
-    setDirection = true;
-    movementGain = 0;
-    if (currentPlayer.returned === true){
-        switchPlayer()
+        if (treasureCount>0){
+        airSupplyTurn(currentPlayer, treasureCount);
+        }
+        
+        $('#announcer').text(currentPlayer.playerName + "'s turn. Choose direction")
+        $('#direction').text('Set direction')
+        actionTurn = false;
+        setDirection = true;
+        movementGain = 0;
+        if (currentPlayer.returned === true){
+            switchPlayer()
+        }
     }
 }
 airSupplyTurn = (player, treasure) => {
@@ -355,24 +358,36 @@ airSupplyTurn = (player, treasure) => {
     }
 }
 newRound = () => {
-    for (i=0; i<playerArray.length; i++){
-        playerArray[i].returned = false;
-        playerArray[i].dive = true;
-        playerArray[i].treaasurePouch = []
-        if(playerArray[i].position >=0){
-            $(`#${playerArray[i].playerName}`).appendTo($('#submarine'))
-        }
-        $(`#${playerArray[i].playerName}`).empty()
-        playerArray[i].position = -1
-        playerArray[i].movement = 0
+    roundsOver++
+    if(roundsOver === 1){
+        document.getElementById("audio").src = "./Audio/Beachway.mp3"
     }
-    lastTurn = false
-    alert('Round ends, penguins who didnt make it back, dropped all their treasure into the trenches..')
-    closeEmptyPath()
-    alert('Penguins will now skip over tiles that has an oxygen tank on them. Time to dive deeper!')
-    // sort playerArray by object key value (playerArray[i].score)
-    airSupply = 25
-    whosFirstTurn();
+    if(roundsOver === 2){
+        document.getElementById("audio").src = "./Audio/Shining Sea.mp3"
+    }
+    if(roundsOver === 3){
+        playerArray.sort((a,b)=>{return b.score - a.score})
+        winner = playerArray[0]
+        alert(winner.playerName + ' wins with ' + winner.score)
+    } else {
+        for (i=0; i<playerArray.length; i++){
+            playerArray[i].returned = false;
+            playerArray[i].dive = true;
+            playerArray[i].treasurePouch = []
+            if(playerArray[i].position >=0){
+                $(`#${playerArray[i].playerName}`).appendTo($('#submarine'))
+            }
+            $(`#${playerArray[i].playerName}`).empty()
+            playerArray[i].position = -1
+            playerArray[i].movement = 0
+        }
+        returnedPlayer = 0;
+        alert('Round ends, penguins who didnt make it back, dropped all their treasure into the trenches..')
+        closeEmptyPath()
+        alert('Penguins will now skip over tiles that has an oxygen tank on them. Time to dive deeper in round' + roundsOver + "!")
+        playerArray.sort((a,b)=>{return a.score - b.score})
+        whosFirstTurn();
+    }
 }
 closeEmptyPath = () => {
     count = 0
