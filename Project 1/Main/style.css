@@ -173,9 +173,6 @@ body {
     width: 300px;
     position: absolute;
 }
-.pathTile{
-    text-align: center;
-}
 .grid {
 display: inline-grid;
 width: 600px;
@@ -209,6 +206,15 @@ grid-template-columns: repeat(6,100px)
     background-repeat: no-repeat;
     background-size: 90px 50px;
     background-position-y: bottom;
+}
+.Bye{
+    width: 100px;
+    height: 140px;
+    background: url('./Backgrounds/Oxygen.png');
+    background-repeat: no-repeat;
+    background-size: 32px auto;
+    background-position-x: 28px;
+    background-position-y: 90px;
 }
 .treasure{
     display: block;
