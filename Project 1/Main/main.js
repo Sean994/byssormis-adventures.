@@ -45,43 +45,50 @@ startGameButton = (event) => {
 howToPlayButton = (event) => {
     clickSound.play()
     $('#helpBox').show()
-    $('#helpText').text("Welcome to ByssOrMis Adventures! You are lucky.")
+}
+showScore = (event) => {
+    clickSound.play()
+    $('#scoreBoardText').empty()
+    $('#scoreBoard').show()
+    $('#scoreBoardText').append($('<h2>').text(`Current round: ${roundsOver}`))
+    for (i in playerArray){
+        playersName = (playerArray[[i]].playerName) 
+        playersScore = (playerArray[i].score)
+        $('#scoreBoardText').append($('<h2>').text(`${playersName} : ${playersScore}`))
+    }
+}
+hideScore= (event) => {
+    clickSound.play()
+    $('#scoreBoardText').empty()
+    $("#scoreBoard").hide()
+}
+historyHelp = (event) => {
+    clickSound.play()
+    $('.chosenHelp').attr('class', 'helpBtn')
+    $(event.currentTarget).attr('class','chosenHelp')
+    $('#helpText').html("ATLANTIC TIMES, 3 MAY 2019 <br />  <br /> Rumours of untold treasures are spreading within the penguin tribe, Krappacino. Most of the penguinfolk are skeptical, except for a bunch of adolescents. Pooling their savings, they managed to afford just one submarine for their expedition. <br /> <br /> This submarine is pivotal in their plan to bring back the treasure (if any). However, it has a limited air supply to be shared among the young Krappas. The individual choices of these younglings will decide if the expedition will be known as The Abyss-Adventure or A Mis-Adventure.")
+}
+turnHelp = (event) => {
+    clickSound.play()
+    $('.chosenHelp').attr('class', 'helpBtn')
+    $(event.currentTarget).attr('class','chosenHelp')
+    $('#helpText').html("BREATHE: At the start of each player's turn, Submarine's air supply will be reduced by the number of treasures player is holding. If the air supply reaches 0 or below, the current player's turn will be the last one of the entire round. <br /> <br /> DIVE or SWIM: Player will roll the dice and move tiles equal to the roll. If player is carrying treasure, subtract the number of treasure from the roll. Eg. If player is carrying 3 treasures & rolls a 4, player will move by 1 tile only. Player can skip over tiles that are already occupied by another player. If player has a treasure, player can decide to return back to submarine or dive deeper. Player must continue all the way back to submarine after deciding to return. ie. Player cannot choose to return this turn, and dive deeper againt during the next turn.<br /><br />  ACTIONS: Player can pick or drop treasure, or do nothing at arrived tile. Player can only drop treasure on empty tiles. Turn ends after this.")
+}
+scoreHelp = (event) => {
+    clickSound.play()
+    $('.chosenHelp').attr('class', 'helpBtn')
+    $(event.currentTarget).attr('class','chosenHelp')
+    $('#helpText').html("TREASURE TYPES: There are 4 tiers/types of treasures scattered in the abyss. Each type are different in appearance and score value (randomly generated). Treasures will only be converted to the player's score when player returns safely to submarine with it. If a player did not return to the submarine safely, all treasures that the player is holding will be lost.<br /> <br /> TIER 1: Gold Coins (2 - 3 points), found on the first 7 tiles. <br /><br /> TIER 2: Oak Crates (4 - 6 points), found on the next 7 tiles.<br /><br /> TIER 3: Willow Chests (7 - 10 points), found on the next 7 tiles.<br /><br /> TIER 4: Mahogany Chests (12 - 15 points), found on the last 7 tiles.")
+}
+roundHelp = (event) => {
+    clickSound.play()
+    $('.chosenHelp').attr('class', 'helpBtn')
+    $(event.currentTarget).attr('class','chosenHelp')
+    $('#helpText').html("Round ends when either one of these 2 conditions is met:<br>1. Air supply reaches 0. <br />2. All players returned safely to the submarine.<br /><br /> After each round, treasure tiles that are empty will be converted to oxygen tanks. Players can skip over these oxygen tanks to advance to the next nearest treasure tile. Player with lowest score will start first in the next round.<br /><br />The whole game ends after 3 rounds and players will be ranked by their score earned by returning treasures safely.")
 }
 hideHelp = (event) => {
     clickSound.play()
     $("#helpBox").hide()
-}
-class Player {
-    constructor(name){
-        this.playerName = name;
-        this.score = 0;
-        this.treasurePouch = []
-        this.movement = 0;
-        this.position = -1;
-        this.dive = true;
-        this.returned = false;
-        this.abyssAdventures = 0;
-        this.misAdventures = 0;
-    }
-    treasureToScore(){
-        var treasureConvert = 0
-        var scoreAdd = 0
-        for (let i = 0; i<this.treasurePouch.length; i++){
-            console.log(this.treasurePouch, 'treasure invent')
-            treasureConvert = this.treasurePouch[i]
-            console.log(treasureConvert, 'tier in question')
-            if(treasureConvert === 1)
-                {scoreAdd = (Math.ceil(Math.random()*2) + 1)}
-            if(treasureConvert === 2)
-                {scoreAdd = (Math.ceil(Math.random()*3) + 3)}
-            if(treasureConvert === 3)
-                {scoreAdd = (Math.ceil(Math.random()*4) + 6)}
-            if(treasureConvert === 4)
-                {scoreAdd = (Math.ceil(Math.random()*4) + 11)}
-            this.score += scoreAdd
-        }
-        this.treasurePouch = []
-    }
 }
 // create player Objects and their board pieces (div), append to submarine
 generatePlayerDivs = (playerCount) => {
@@ -146,7 +153,8 @@ generateTreasureArray = () => {
 // Player turn roller 
 whosFirstTurn = () => {
     currentPlayer = playerArray[0]
-    $('#announcer').text(currentPlayer.playerName + "'s turn. Dive deep!")
+    $('#announcer').text(currentPlayer.playerName + "'s turn. Roll dice to start exploring the deep!")
+    $('#direction').text('Roll or Set Return')
     airSupply = 25
     diceThrow = true;
     actionTurn = false
@@ -162,11 +170,11 @@ setReturnSub = (event) => {
     }
     if (currentPlayer.position >= 0 && currentPlayer.dive &&!actionTurn){
         $('#direction').text('Returning to Sub!')
-        $('#announcer').text(currentPlayer.playerName + ' deicded to return to sub.')
+        $('#announcer').text(currentPlayer.playerName + ' deicded to return to sub. Roll the die!')
         currentPlayer.dive = false
     }
     if (currentPlayer.position < 0 /*&& setDirection === true*/){
-        $('#announcer').text(currentPlayer.playerName + ' is already in sub. Dive deeper')
+        $('#announcer').text(currentPlayer.playerName + ' is already in sub. Dive deeper!')
     }
 }
 // Player option 2: Roll die only
@@ -178,14 +186,14 @@ rollDice = (event) => {
     if (diceThrow) {
         movementGain = Math.floor(Math.random() * 6 + 1)
         treasureTotal = currentPlayer.treasurePouch.length
+        $('#direction').text('Rolled a ' + movementGain + '!')
         if (treasureTotal === 0){
             currentPlayer.movement += movementGain 
         } else {
             currentPlayer.movement += movementGain - treasureTotal 
-            console.log('dice rolled', movementGain, 'minus', treasureTotal)
             if (currentPlayer.movement <= 0){
                 currentPlayer.movement = 0;
-                $('#announcer').text(currentPlayer.playerName + " felt heavy. Choose action.")
+                $('#announcer').text("The treasure felt too heavy for " + currentPlayer.playerName + ". Choose action.")
                 actionTurn = true
             }
         }
@@ -193,11 +201,11 @@ rollDice = (event) => {
     diceThrow = false;
     if(currentPlayer.dive === true && currentPlayer.movement > 0){
         divePlayer()
-        $('#direction').text(currentPlayer.playerName + '\'s Diving!')
+        // $('#direction').text(currentPlayer.playerName + '\'s Diving!')
     }
     if(currentPlayer.dive === false && currentPlayer.movement > 0)
         returnPlayer()  
-        $('#direction').text(currentPlayer.playerName + '\'s Diving!')
+        // $('#direction').text(currentPlayer.playerName + '\'s Diving!')
 }
 divePlayer = () => {
     setDirection = false;
@@ -211,12 +219,12 @@ divePlayer = () => {
         }
         if (currentPlayer.position === 27){   
             currentPlayer.movement = 0
-            console.log("congrats you have reached the end")
+            $('#announcer').text('Congrats, you touched the ocean floor.')
         }
         renderPlayer = $('#' + currentPlayer.playerName)
         $(renderPath).prepend(renderPlayer)
     }
-    $('#announcer').text('Landed at tile ' +(currentPlayer.position + 1)+', choose action.')
+    $('#announcer').text(currentPlayer.playerName + ' dived down to tile ' +(currentPlayer.position + 1)+', choose action.')
     actionTurn = true;
 }
 returnPlayer = () => {
@@ -231,11 +239,11 @@ returnPlayer = () => {
         }
         renderPlayer = $('#' + currentPlayer.playerName)
         $(renderPath).prepend(renderPlayer)
-        $('#announcer').text('Landed at tile ' +(currentPlayer.position+1)+', choose action.')
+        $('#announcer').text(currentPlayer.playerName + ' swam upwards to tile ' +(currentPlayer.position+1)+', choose action.')
         actionTurn = true;
         if (currentPlayer.position === -1){
             $('#submarine').prepend(renderPlayer)
-            $('#announcer').text(currentPlayer.playerName + ' returned safely!')
+            $('#announcer').text(currentPlayer.playerName + ' returned to the sub safely!')
             currentPlayer.treasureToScore()
             currentPlayer.movement = 0
             currentPlayer.returned = true;
@@ -269,7 +277,7 @@ pickTreasure = () => {
             }
         }
     } else {
-        $('#announcer').text('Roll the die first.')
+        $('#announcer').text('Roll the dice first.')
     }
 }
 dropTreasure = () => {
@@ -332,9 +340,9 @@ switchPlayer = () => {
         airSupplyTurn(currentPlayer, treasureCount);
         }
         if(currentPlayer.dive === true){
-            $('#announcer').text(currentPlayer.playerName + "'s turn. Currently diving.")
+            $('#announcer').text(currentPlayer.playerName + "'s turn. Currently diving deeper. Roll the dice!")
         } else {
-            $('#announcer').text(currentPlayer.playerName + "'s turn. Heading back to sub.")
+            $('#announcer').text(currentPlayer.playerName + "'s turn. Returning to the sub. Roll the dice!")
         }
         $('#direction').text('Roll or Set Return')
         actionTurn = false;
@@ -362,6 +370,7 @@ airSupplyTurn = (player, treasure) => {
 newRound = () => {
     roundsOver++
     turnSwitcher = 0;
+    
     if(roundsOver === 1){
         document.getElementById("audio").src = "./Audio/Beachway.mp3"
     }
@@ -402,6 +411,38 @@ closeEmptyPath = () => {
         count++
     }
 }
+class Player {
+    constructor(name){
+        this.playerName = name;
+        this.score = 0;
+        this.treasurePouch = []
+        this.movement = 0;
+        this.position = -1;
+        this.dive = true;
+        this.returned = false;
+        this.abyssAdventures = 0;
+        this.misAdventures = 0;
+    }
+    treasureToScore(){
+        var treasureConvert = 0
+        var scoreAdd = 0
+        for (let i = 0; i<this.treasurePouch.length; i++){
+            console.log(this.treasurePouch, 'treasure invent')
+            treasureConvert = this.treasurePouch[i]
+            console.log(treasureConvert, 'tier in question')
+            if(treasureConvert === 1)
+                {scoreAdd = (Math.ceil(Math.random()*2) + 1)}
+            if(treasureConvert === 2)
+                {scoreAdd = (Math.ceil(Math.random()*3) + 3)}
+            if(treasureConvert === 3)
+                {scoreAdd = (Math.ceil(Math.random()*4) + 6)}
+            if(treasureConvert === 4)
+                {scoreAdd = (Math.ceil(Math.random()*4) + 11)}
+            this.score += scoreAdd
+        }
+        this.treasurePouch = []
+    }
+}
 class audioEffect{
     constructor(source){
     this.sound = document.createElement("audio");
@@ -421,7 +462,7 @@ class audioEffect{
 const main = () => {
     $('#gameBoard').hide()
     $('#helpBox').hide()
-    // $('#howToPlayBoard').hide()
+    $('#scoreBoard').hide()
     $('.choosePlayers').on('click', (event) => choosePlayerButton(event))
     $('#startGameButton').on('click', (event) => startGameButton(event))
     $('#howToPlayButton').on('click', (event) => howToPlayButton(event))
@@ -431,7 +472,13 @@ const main = () => {
     $('#pickTreasure').on('click', (event) => pickTreasure(event))
     $('#dropTreasure').on('click', (event) => dropTreasure(event))
     $('#doNothingButton').on('click', (event) => doNothing(event))
-    $('#closeHelp').on('click', () => hideHelp(event))
+    $('#scoreBoardButton').on('click', () => showScore(event))
+    $('#closeScore').on('click', () => hideScore(event))
+    $('#HistoryHelpBtn').on('click', () => historyHelp(event))
+    $('#turnHelpBtn').on('click', () => turnHelp(event))
+    $('#scoreHelpBtn').on('click', () => scoreHelp(event))
+    $('#roundHelpBtn').on('click', () => roundHelp(event))
+    $('#closeHelpBtn').on('click', () => hideHelp(event))
     $('#utilityHelp').on('click', () => howToPlayButton(event))
     audio.muted = false;
     audio.volume = 0.4;

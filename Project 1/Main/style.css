@@ -48,7 +48,8 @@ body {
     padding: 12px;
     border-radius: 5px;
     border: black solid 2px;
-    color: black;
+    color: white;
+    text-shadow: 2px 1px black;
     background-image: linear-gradient(dodgerblue, dodgerblue), linear-gradient(darkorange, orange);
     background-size: 100% 100%, auto;
     background-repeat: no-repeat;
@@ -89,42 +90,44 @@ body {
     transition: all .6s ease-out;
     margin: 50px 40px 0px 0;
 }
-#helpBox {
+#scoreBoard {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-end;
-    justify-content: space-between;
+    justify-content: space-evenly;
     position: relative;
     left: 360px;
     top: 150px;
-    z-index: 2;
-    height: 300px;
-    width: 500px;
+    z-index: 1;
+    height: 350px;
+    width: 600px;
     padding: 20px;
     background:dodgerblue;
     border-radius: 15px;
     box-shadow:  inset 5px 5px 7px rgba(255,255,255,0.3), inset -5px -5px 7px rgba(255,255,255,0.3);
     background: #283869;
 }
-#helpText {
+#scoreBoard div {
     font-family: 'Open Sans', sans-serif;
     font-size: 14px;
+    line-height: 12px;
+    flex-wrap: wrap;
     color: white;
     text-shadow: 1px 1px black;
-    height: 200px;
-    width: 450px; 
+    height: 260px;
+    width: 540px; 
+    text-align: justify;
     justify-self: center;
     background-color: rgba(0,0,0,0.1);
     display: block;
-    padding: 20px;
+    padding: 10px;
     border-radius: 20px;
     margin: 0 30px;
 }
-#helpBox button {
-    justify-content: space-around;
+#scoreBoard button {
     height: 30px;
-    width: 80px;
+    width: 180px;
     font: 'Open Sans', sans-serif;
     font-weight: bold;
     border-radius: 5px;
@@ -135,10 +138,77 @@ body {
     background-repeat: no-repeat;
     background-position: center bottom;
     transition: all .4s ease-out;
+    margin: 10px 10px;
+}
+#scoreBoard button:hover {
+    background-size: 100% 3px, auto;
+}
+#helpBox {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-evenly;
+    position: relative;
+    left: 360px;
+    top: 150px;
+    z-index: 2;
+    height: 350px;
+    width: 600px;
+    padding: 20px;
+    background:dodgerblue;
+    border-radius: 15px;
+    box-shadow:  inset 5px 5px 7px rgba(255,255,255,0.3), inset -5px -5px 7px rgba(255,255,255,0.3);
+    background: #283869;
+}
+#helpText {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    flex-wrap: wrap;
+    color: white;
+    text-shadow: 1px 1px black;
+    height: 260px;
+    width: 540px; 
+    text-align: justify;
+    justify-self: center;
+    background-color: rgba(0,0,0,0.1);
+    display: block;
+    padding: 10px;
+    border-radius: 20px;
     margin: 0 30px;
 }
-#helpBox button:hover {
+.helpBtn {
+    height: 30px;
+    width: 100px;
+    font: 'Open Sans', sans-serif;
+    font-weight: bold;
+    border-radius: 5px;
+    border: black solid 2px;
+    color: black;
+    background-image: linear-gradient(dodgerblue, dodgerblue), linear-gradient(darkorange, orange);
+    background-size: 0 5px, auto;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    transition: all .4s ease-out;
+    margin: 10px 10px;
+}
+.helpBtn:hover {
     background-size: 100% 3px, auto;
+}
+.chosenHelp{
+    height: 30px;
+    width: 100px;
+    font: 'Open Sans', sans-serif;
+    font-weight: bold;
+    border-radius: 5px;
+    border: black solid 2px;
+    color: white;
+    background-image: linear-gradient(dodgerblue, dodgerblue), linear-gradient(darkorange, orange);
+    background-size: 100% 100%, auto;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    transition: all .6s ease-out;
+    margin: 10px 10px;
 }
 #penguinPreview{
     height: 100px;
@@ -179,12 +249,12 @@ body {
 
 }
 #announcer{ 
-    width: 260px;
+    width: 320px;
     height: 50px;
     font-size: 14px;
 }
 #airSupply {
-    width: 130px;
+    width: 120px;
     height: 50px;
     font-size: 14px;
 }
