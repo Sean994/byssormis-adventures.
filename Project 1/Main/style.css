@@ -151,9 +151,9 @@ body {
     justify-content: space-evenly;
     position: relative;
     left: 360px;
-    top: 150px;
+    top: 110px;
     z-index: 2;
-    height: 350px;
+    height: 400px;
     width: 600px;
     padding: 20px;
     background:dodgerblue;
@@ -167,7 +167,7 @@ body {
     flex-wrap: wrap;
     color: white;
     text-shadow: 1px 1px black;
-    height: 260px;
+    height: 300px;
     width: 540px; 
     text-align: justify;
     justify-self: center;
@@ -309,7 +309,7 @@ body {
 display: inline-grid;
 width: 600px;
 height: 140px;
-grid-template-columns: repeat(7,100px)
+grid-template-columns: repeat(8,100px)
 }
 #grid1 {
     position: absolute;
