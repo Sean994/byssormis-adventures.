@@ -44,15 +44,16 @@
                 Im announcer
             </div>
             <div class="dropdown">
-                <button class="dropbtn" id='direction'>Set direction</button>
+                <button class="dropbtn" id='direction'>
+                    Roll or Set Return
+                </button>
                 <div class="dropdown-content">
-                    <button id='diveDeep'>Dive Deep</button>
-                    <button id='returnSub'>Return to Sub</button>
+                    <button id='rollDie'> Roll Dice </button>  
+                    <button id='returnSub'>Decide to return</button>
                 </div>
             </div>
-            <button id='rollDie'>Roll Dice</button>  
             <div class="dropdown">
-                <button class="dropbtn" id='tileAction'>Action</button>
+                <button class="dropbtn" id='tileAction'>Tile Actions</button>
                 <div class="dropdown-content">
                     <button id='pickTreasure'>Pick up treasure</button>
                     <button id='dropTreasure'>Drop treasure</button>
@@ -60,9 +61,16 @@
                 </div>
             </div>             
             <button id='scoreBoardButton'>Scoreboard</button>
+            <button id='utilityHelp'>How to Play</button>
         </div>
         <div id='submarine'>           
         </div>
+    </div>
+    <div id='helpBox'>
+        <span class='helpNStart' id='helpText'>Welceom to ByssOrMis</span>
+            <button class='helpNStart' id='prevHelp'>Back</button>
+            <button class='helpNStart' id='closeHelp'>Close</button>
+            <button class='helpNStart' id='nextHelp'>Next</button>
     </div>
     <audio id='audio' controls autoplay loop muted='muted' preload="auto">
         <source src="./Audio/Nautilus.mp3" type="audio/mpeg">
