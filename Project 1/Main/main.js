@@ -16,6 +16,7 @@ startGameButton = () => {
         $('#landingPage').hide()
         $('#gameBoard').show()
         $('.directionSigns').show()
+        $('#audio').show()
         generatePathDivs()
         playerArray = generatePlayerDivs(playerCount)
         treasureArray = createTreasureArray(32)
@@ -23,7 +24,7 @@ startGameButton = () => {
     }
     $('body').css('background', "url('./Backgrounds/Underwater720.jpg')")
     $('body').css('background-repeat', "no-repeat")
-    
+    scrollFound = false;
     turnSwitcher = 0
     roundsOver = 0
     returnedPlayer = 0
@@ -101,7 +102,7 @@ whosFirstTurn = () => {
     currentPlayer = playerArray[0]
     $('#announcer').text(currentPlayer.playerName + "'s turn. Roll dice to start exploring the deep!")
     $('#direction').text('Roll or Set Return')
-    airSupply = (playerArray.length)*5 + 20
+    airSupply = (playerArray.length)*2 + 28
     $('#airSupply').text("Air Supply: " + airSupply)
     diceThrow = true;
     actionTurn = false
@@ -120,6 +121,7 @@ setReturnSub = () => {
     }
     if (currentPlayer.position >= 0 && currentPlayer.dive && currentPlayer.treasurePouch.length > 0 && !actionTurn){
         $('#direction').text('Confirm return?')
+        eventPop.play()
         $('#returnBoard').show()
     }
     if (currentPlayer.position < 0){
@@ -138,6 +140,20 @@ hideReturn = () => {
     $('#direction').text('Roll or Set Return')
     $('#returnBoard').hide()
 }
+eventBoardShow = (text) => {
+    setTimeout( () => {
+        eventPop.play()
+        $('#eventBoard').show()
+        $('#eventText').text(text)
+        console.log(text) 
+        
+    }, 800)
+    console.log ('hi')
+}
+hideEvent = () => {
+    clickSound.play()
+    $('#eventBoard').hide()
+}
 rollDice = () => {
     clickSound.play()
     if (actionTurn){
@@ -154,6 +170,8 @@ rollDice = () => {
             if (currentPlayer.movement <= 0){
                 currentPlayer.movement = 0;
                 $('#announcer').text("The treasure felt too heavy for " + currentPlayer.playerName + ". Choose action.")
+                text = currentPlayer.playerName + " rolled " + movementGain + " but the treasure feels heavier.. "
+                eventBoardShow(text)
                 actionTurn = true
             }
         }
@@ -340,12 +358,15 @@ switchPlayer = () => {
 airSupplyTurn = (player, treasure) => {
     airSupply -= treasure
     if (airSupply > 0 ){
-        $('#airSupply').text("Air Supply: " + airSupply)
-        alert(player.playerName + ' is holding ' + treasure +' treasures. Air supply minus by '+ treasure + '. Current air supply is ' + airSupply + ' good luck')
         bubbleSound.play()
+        treasureText = treasure>1 ? "treasure boxes":"treasure box"
+        text = player.playerName + ' is currently holding ' + treasure + ' ' + treasureText + '. '  + 'This round\'s Air supply is reduced by '+ treasure + '. ' + 'You have ' + airSupply + ' units of air supply remaining.'
+        eventBoardShow(text)
+        $('#airSupply').text("Air Supply: " + airSupply)
     } else {
         bubbleSound.play()
-        alert('Air supply ran out!! This is the last turn of the round')
+        text = 'The air supply ran out!! This will be the last turn of this round.'
+        eventBoardShow(text)
         $('#airSupply').text("Air Supply: Empty!")
         lastTurn = true;
     }
@@ -360,26 +381,37 @@ newRound = () => {
         document.getElementById("audio").src = "./Audio/Shining Sea.mp3"
     }
     if(roundsOver === 3){
+        audio.volume = 0.5
+        document.getElementById("audio").src = "./Audio/Missing You.mp3"
+        audio
         playerArray.sort((a,b)=>{return b.score - a.score})
-        winner = playerArray[0]
-        alert(winner.playerName + ' wins with ' + winner.score)
-        showScore()
+        winner = playerArray[0].playerName
+        if (playerArray[0].score === playerArray[1].score){
+            winner = playerArray[0].playerName + " and " + playerArray[1].playerName
+        }
+        if (scrollFound){
+            text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! The Lost Scroll to Eternal Joy has finally been found and as the scroll is being unrolled slowly, the entire town brims with anticipation. Perhaps, it is a map to greater riches. Alas! The opened scroll reveals an old recipe for Sicilian Fish Stew, written neatly and signed by Granny Doris. That day, the penguins found eternal joy indeed. The recipe became the crown piece of the Krappacino Archives and spurred a new age of chefs.')
+            eventBoardShow(text)
+        }else {
+            text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! Upon returning to Krappacino Town Hall, the younglings confirmed that the rumoured treasures were true after all. Their successful expedition set a pivotal point in the reputation of the Bronze Beak Penguins. This historical moment spurred a new age of explorers, young and old.')
+            eventBoardShow(text)
+        }
     } else {
         for (i=0; i<playerArray.length; i++){
-            playerArray[i].returned = false;
-            playerArray[i].dive = true;
-            playerArray[i].treasurePouch = []
             if(playerArray[i].position >=0){
                 $(`#${playerArray[i].playerName}`).appendTo($('#submarine'))
             }
-            $(`#${playerArray[i].playerName}`).empty()
+            playerArray[i].returned = false;
+            playerArray[i].dive = true;
+            playerArray[i].treasurePouch = []
             playerArray[i].position = -1
             playerArray[i].movement = 0
+            $(`#${playerArray[i].playerName}`).empty()
         }
         returnedPlayer = 0;
-        alert('Round ends, penguins who didnt make it back, dropped all their treasure into the trenches..')
+        text = ('Round ' + (roundsOver) +' is over. Any penguins who were still mid-way back, panicked, dropped the weighty treasures and made it back safely. The penguins realized they can kick off the empty air tanks and propel themsleves forward into the deep. Penguins will now skip over tiles that has an air tank on them. Time to dive deeper in round ' + (roundsOver+1) + "!")
+        eventBoardShow(text)
         closeEmptyPath()
-        alert('Penguins will now skip over tiles that has an oxygen tank on them. Time to dive deeper in round' + (roundsOver+1) + "!")
         playerArray.sort((a,b)=>{return a.score - b.score})
         whosFirstTurn();
     }
@@ -420,7 +452,7 @@ historyHelp = (event) => {
     clickSound.play()
     $('.chosenHelp').attr('class', 'helpBtn')
     $(event.currentTarget).attr('class','chosenHelp')
-    $('#helpText').html("ATLANTIC TIMES, 3 MAY 2019 <br />  <br /> Rumours of untold treasures are spreading within the bronze-beak penguin tribe, Krappacino. A long forgotten myth - The Lost Scroll to Eternal Joy, is currently trending in The Igloo Forums. Most of the penguinfolk remain skeptical, except for a bunch of adolescents. Pooling their savings, they managed to afford a single yellow submarine for their expedition. <br /> <br /> This submarine is pivotal in their plan to bring back the rumored treasures (if any). However, the submarine is equipped with a limited supply of fresh air; to be shared among the young Krappas. The individual choices of these younglings will decide if the expedition will be known as The Abyss-Adventure or A Mis-Adventure. <br /><br /> Will they find these untold treasures and have their lives change forever? <br /> Or .. will they just become another meme icon for future generations.")
+    $('#helpText').html("ATLANTIC TIMES, 3 MAY 2019 <br />  <br /> Rumours of untold treasures are spreading within the bronze-beak penguin tribe, Krappacino. A long forgotten myth - The Lost Scroll to Eternal Joy, is currently trending in The Igloo Forums. Most of the penguinfolk remain skeptical, except for a bunch of adolescents. Pooling their savings, they managed to afford a single yellow submarine for their expedition. <br /> <br /> This submarine is pivotal in their plan to bring back the rumored treasures (if any). However, the submarine can only bring a limited supply of fresh air; to be shared among the young Krappas. The individual choices of these younglings will decide if the expedition will be known as The Abyss-Adventure or A Mis-Adventure. <br /><br /> Will they find these untold treasures and have their lives change forever? <br /> Or .. will they just become another meme icon for future generations.")
 }
 turnHelp = (event) => {
     clickSound.play()
@@ -468,6 +500,7 @@ loadClickListeners = () => {
     $('#closeHelpBtn').on('click', () => hideHelp())
     $('#confirmReturn').on('click', () => setReturnConfirm())
     $('#closeReturn').on('click', () => hideReturn())
+    $('#closeEvent').on('click', () => hideEvent())
     // Music and sound effects
     $(".choosePlayers").mouseenter((event) => hoverSound.play(event))
     $(".startOrHow").mouseenter((event) => hoverSound.play(event))
@@ -475,17 +508,19 @@ loadClickListeners = () => {
     $(".helpBtn").mouseenter((event) => hoverSound.play(event))
     $(".closeScoreBtn").mouseenter((event) => hoverSound.play(event))
     $(".returnBtn").mouseenter((event) => hoverSound.play(event))
+    $('#closeEvent').mouseenter((event) => hoverSound.play(event))
     $("#utilityList div").mouseenter((event) => hoverSound.play(event))
     $("#utilityList button").mouseenter((event) => hoverSound.play(event))
 }
 loadAudioEffects = () => {
     audio.muted = false;
-    audio.volume = 0.3;
+    audio.volume = 0.2;
     clickSound = new audioEffect('./Audio/Click.wav')
     hoverSound = new audioEffect('./Audio/Hover.wav')
     pickSound = new audioEffect('./Audio/PickUp.wav')
     bubbleSound = new audioEffect('./Audio/Bubble.wav')
     jumpSound = new audioEffect('./Audio/Jump.mp3')
+    eventPop = new audioEffect('./Audio/EventPop.mp3')
 }
 class Player {
     constructor(name){
@@ -511,7 +546,9 @@ class Player {
             if(treasureConvert === 4)
                 {scoreAdd = (Math.ceil(Math.random()*4) + 11)}
             if(treasureConvert === 5)
-                {scoreAdd = 50}
+                {scoreAdd = 50
+                scrollFound = true;
+                }
             this.score += scoreAdd
         }
         this.treasurePouch = []
@@ -538,6 +575,8 @@ const main = () => {
     $('#helpBox').hide()
     $('#scoreBoard').hide()
     $('#returnBoard').hide()
+    $('#audio').hide()
+    $('#eventBoard').hide()
     $('.directionSigns').hide()
     loadClickListeners()
     loadAudioEffects()
