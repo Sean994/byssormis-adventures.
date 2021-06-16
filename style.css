@@ -38,6 +38,7 @@ body {
     background-position: center bottom;
     transition: all .4s ease-out;
     margin: 0 5px 40px 0;
+    cursor: pointer;
 }
 .choosePlayers:hover {
     background-size: 100% 4px, auto;
@@ -56,6 +57,7 @@ body {
     background-position: center bottom;
     transition: all .6s ease-out;
     margin: 0 5px 40px 0;
+    cursor: pointer;
 }
 .startOrHow {
     font: 'Open Sans', sans-serif;
@@ -71,24 +73,10 @@ body {
     background-position: center bottom;
     transition: all .4s ease-out;
     margin: 50px 40px 0px 0;
+    cursor: pointer;
 }
 .startOrHow:hover {
     background-size: 100% 8px, auto;
-}
-.startOrHowChosen {
-    font: 'Open Sans', sans-serif;
-    font-weight: bold;
-    font-size: 50px;
-    padding: 12px;
-    border-radius: 5px;
-    border: black solid 2px;
-    color: black;
-    background-image: linear-gradient(dodgerblue, dodgerblue), linear-gradient(darkorange, orange);
-    background-size: 100% 100%, auto;
-    background-repeat: no-repeat;
-    background-position: center bottom;
-    transition: all .6s ease-out;
-    margin: 50px 40px 0px 0;
 }
 #scoreBoard {
     display: flex;
@@ -124,6 +112,7 @@ body {
     padding: 10px;
     border-radius: 20px;
     margin: 0 30px;
+    cursor: pointer;
 }
 #scoreBoard button {
     height: 30px;
@@ -139,8 +128,117 @@ body {
     background-position: center bottom;
     transition: all .4s ease-out;
     margin: 10px 10px;
+    cursor: pointer;
 }
 #scoreBoard button:hover {
+    background-size: 100% 3px, auto;
+}
+#returnBoard {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+    left: 360px;
+    top: 150px;
+    z-index: 2;
+    height: 100px;
+    width: 500px;
+    padding: 20px;
+    background:dodgerblue;
+    border-radius: 15px;
+    box-shadow:  inset 5px 5px 7px rgba(255,255,255,0.3), inset -5px -5px 7px rgba(255,255,255,0.3);
+    background: #283869;
+}
+#returnBoard span {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    align-items:center;
+    flex-wrap: wrap;
+    color: white;
+    text-shadow: 1px 1px black;
+    height: 40px;
+    width: 500px; 
+    background-color: rgba(0,0,0,0.1);
+    padding: 10px;
+    border-radius: 20px;
+    margin: 0 10px;
+    cursor: pointer;
+}
+#returnBoard button {
+    height: 30px;
+    width: 80px;
+    font: 'Open Sans', sans-serif;
+    font-weight: bold;
+    border-radius: 5px;
+    border: black solid 2px;
+    color: black;
+    background-image: linear-gradient(dodgerblue, dodgerblue), linear-gradient(darkorange, orange);
+    background-size: 0 5px, auto;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    transition: all .4s ease-out;
+    margin: 10px 10px;
+    cursor: pointer;
+}
+#returnBoard button:hover {
+    background-size: 100% 3px, auto;
+}
+#eventBoard {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+    left: 360px;
+    top: 110px;
+    z-index: 2;
+    height: 160px;
+    width: 600px;
+    padding: 12px;
+    background:dodgerblue;
+    border-radius: 15px;
+    box-shadow:  inset 5px 5px 7px rgba(255,255,255,0.3), inset -5px -5px 7px rgba(255,255,255,0.3);
+    background: #283869;
+}
+#eventText {
+    display: flex;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    line-height: 17px;
+    align-items: center;
+    text-align: center;
+    color: white;
+    text-shadow: 1px 1px black;
+    height: 110px;
+    width: 550px; 
+    background-color: rgba(0,0,0,0.1);
+    padding: 5px;
+    border-radius: 20px;
+    margin: 0 10px;
+    cursor: pointer;
+}
+#closeEvent{
+    height: 30px;
+    width: 80px;
+    font: 'Open Sans', sans-serif;
+    font-weight: bold;
+    border-radius: 5px;
+    border: black solid 2px;
+    color: black;
+    background-image: linear-gradient(dodgerblue, dodgerblue), linear-gradient(darkorange, orange);
+    background-size: 0 5px, auto;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    transition: all .4s ease-out;
+    margin: 2px 10px;
+    cursor: pointer;
+}
+#closeEvent:hover {
     background-size: 100% 3px, auto;
 }
 #helpBox {
@@ -151,9 +249,9 @@ body {
     justify-content: space-evenly;
     position: relative;
     left: 360px;
-    top: 150px;
+    top: 110px;
     z-index: 2;
-    height: 350px;
+    height: 400px;
     width: 600px;
     padding: 20px;
     background:dodgerblue;
@@ -167,7 +265,7 @@ body {
     flex-wrap: wrap;
     color: white;
     text-shadow: 1px 1px black;
-    height: 260px;
+    height: 300px;
     width: 540px; 
     text-align: justify;
     justify-self: center;
@@ -176,6 +274,7 @@ body {
     padding: 10px;
     border-radius: 20px;
     margin: 0 30px;
+    cursor: pointer;
 }
 .helpBtn {
     height: 30px;
@@ -191,6 +290,7 @@ body {
     background-position: center bottom;
     transition: all .4s ease-out;
     margin: 10px 10px;
+    cursor: pointer;
 }
 .helpBtn:hover {
     background-size: 100% 3px, auto;
@@ -240,7 +340,7 @@ body {
     border: black solid 2px;
     color: black;
     background-color: yellow;
-   
+    cursor: alias;
 }
 #utilityList .gameInfo:hover{
     transform: translateY(-10px);
@@ -274,6 +374,7 @@ body {
     background-repeat: no-repeat;
     background-position: center bottom;
     transition: all .4s ease-out;
+    cursor: pointer;
 }
 #utilityList button:hover {
     background-size: 100% 4px, auto;
@@ -288,28 +389,27 @@ body {
     background-color: transparent;
     min-width: 120px;
     z-index: 1;
-    
+    cursor: pointer;
 }
 .dropdown:hover .dropdown-content {
     display: block;
-    
 }
 /* Gameboard: Treasure and Path */
 #submarine {
-    background: url('./Backgrounds/submarine.png');
-    background-size: 62% auto;
+    background: url('./Backgrounds/submarine2.png');
+    background-size: 73% auto;
     background-repeat: no-repeat; 
-    background-position: 37px 46px;
-    opacity: 20;
+    background-position: 35px 5px;
     height: 240px;
     width: 300px;
     position: absolute;
+    opacity: 0.8;
 }
 .grid {
 display: inline-grid;
 width: 600px;
 height: 140px;
-grid-template-columns: repeat(7,100px)
+grid-template-columns: repeat(8,100px)
 }
 #grid1 {
     position: absolute;
@@ -353,7 +453,7 @@ grid-template-columns: repeat(7,100px)
     width: auto;
     height: 28px;
     position: absolute;
-    transform: translateX(30px);
+    transform: translateX(28px);
     top: 80px;
 }
 .penguins {
@@ -371,9 +471,78 @@ grid-template-columns: repeat(7,100px)
 }
 audio{
     display: inline-flex;
-    position: sticky;
-    position: -webkit-sticky;
+    position: absolute;
     /* left: 2%; */
-    top: 88%;
-    width: 200px;
+    top: 38px;
+    left: 1050px;
+    height: 40px;
+    width: 170px;
+}
+.directionSigns {
+    position: absolute;
+    left: 250px;
+    height: 600px;
+    width: 1000px;
+    z-index: -1;
+}
+#direction1{
+    position: absolute;
+    top: 10px;
+    left: 380px;
+    height: 100px;
+    opacity: 0.8;
+    width: auto;
+}
+#direction2{
+    position: absolute;
+    right: -20px;
+    top: 90px;
+    height: 110px;
+    width: auto;
+    opacity: 0.7;
+    transform: rotate(-20deg) scaleX(-1);
+}
+#direction3{
+    position: absolute;
+    left: -30px;
+    top: 240px;
+    opacity: 0.6;
+    transform: rotate(20deg);
+}
+#direction4{
+    position: absolute;
+    right: 50px;
+    top: 340px;
+    opacity: 0.6;
+    transform: rotate(-40deg) scaleX(-1);
+}
+#shark1{
+    position: absolute;
+    right: -40px;
+    top: 490px;
+    opacity: 0.7;
+    display: none;
+}
+#shark2{
+    position: absolute;
+    right: -40px;
+    top: 490px;
+    opacity: 0.4;
+    display: none;
+}
+#danger1{
+    position: absolute;
+    left: -370px;
+    top: 277px;
+    transform: scaleX(-1);
+    opacity: 0.7;
+    display: none;
+}
+#danger2{
+    position: absolute;
+    left: -340px;
+    top: 260px;
+    transform: scaleX(-1);
+    opacity: 0.9;
+    display: none;
 }
