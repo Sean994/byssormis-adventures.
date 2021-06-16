@@ -144,11 +144,8 @@ eventBoardShow = (text) => {
     setTimeout( () => {
         eventPop.play()
         $('#eventBoard').show()
-        $('#eventText').text(text)
-        console.log(text) 
-        
+        $('#eventText').text(text) 
     }, 800)
-    console.log ('hi')
 }
 hideEvent = () => {
     clickSound.play()
@@ -207,7 +204,6 @@ divePlayer = () => {
         if (currentPlayer.position >= lastTile-1){   
             currentPlayer.movement = 0
             currentPlayer.position = lastTile-1
-            alert ('Congrats, you touched the ocean floor. Turn back now.')
             currentPlayer.dive = false;
             $('#announcer').text(currentPlayer.playerName + ' hears a deep growl.. time to go back..')
         }
@@ -331,7 +327,7 @@ doNothing = () => {
     }
 }
 switchPlayer = () => {
-    if (returnedPlayer === playerArray.length){
+    if (returnedPlayer === playerArray.length || airSupply <= 0){
         newRound()
     } else {
         turnSwitcher ++
@@ -380,7 +376,7 @@ newRound = () => {
     if(roundsOver === 2){
         document.getElementById("audio").src = "./Audio/Shining Sea.mp3"
     }
-    if(roundsOver === 3){
+    if(roundsOver >= 3){
         audio.volume = 0.5
         document.getElementById("audio").src = "./Audio/Missing You.mp3"
         audio
@@ -431,7 +427,7 @@ showScore = () => {
     $("#helpBox").hide()
     $('#scoreBoardText').empty()
     $('#scoreBoard').show()
-    $('#scoreBoardText').append($('<h2>').text(`Current round: ${roundsOver}`))
+    $('#scoreBoardText').append($('<h2>').text(`Current round: ${roundsOver + 1}`))
     for (i in playerArray){
         playersName = (playerArray[[i]].playerName) 
         playersScore = (playerArray[i].score)
