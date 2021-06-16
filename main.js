@@ -157,11 +157,16 @@ rollDice = () => {
         $('#announcer').text('You already rolled the dice, pick tile action')
     }
     if (diceThrow) {
+        diceThrow=false;
         movementGain = Math.floor(Math.random() * 6 + 1)
         treasureTotal = currentPlayer.treasurePouch.length
         $('#direction').text('Rolled a ' + movementGain + '!')
         if (treasureTotal === 0){
             currentPlayer.movement += movementGain 
+            if(currentPlayer.dive === true && currentPlayer.movement > 0)
+            {divePlayer()}
+            if(currentPlayer.dive === false && currentPlayer.movement > 0)
+            {returnPlayer()}    
         } else {
             currentPlayer.movement += movementGain - treasureTotal 
             if (currentPlayer.movement <= 0){
@@ -171,16 +176,12 @@ rollDice = () => {
                 eventBoardShow(text)
                 actionTurn = true
             }
+            if(currentPlayer.dive === true && currentPlayer.movement > 0)
+                {divePlayer()}
+            if(currentPlayer.dive === false && currentPlayer.movement > 0)
+                {returnPlayer()}     
         }
-    }
-    diceThrow = false;
-    if(currentPlayer.dive === true && currentPlayer.movement > 0){
-        divePlayer()
-        // $('#direction').text(currentPlayer.playerName + '\'s Diving!')
-    }
-    if(currentPlayer.dive === false && currentPlayer.movement > 0)
-        returnPlayer()  
-        // $('#direction').text(currentPlayer.playerName + '\'s Diving!')
+    }    
 }
 divePlayer = () => {
     lastTile = treasureArray.length
@@ -207,11 +208,11 @@ divePlayer = () => {
             currentPlayer.dive = false;
             $('#announcer').text(currentPlayer.playerName + ' hears a deep growl.. time to go back..')
         }
-        if(currentPlayer.movement <= 0 || currentPlayer.position === lastTile-1){
+        if(currentPlayer.movement <= 0 || currentPlayer.position >= lastTile-1){
             clearInterval(timerDive)
             actionTurn = true;
         }   
-    }, 500) 
+    }, 300) 
 }
 returnPlayer = () => {
     // while (currentPlayer.movement != 0)
@@ -386,7 +387,7 @@ newRound = () => {
             winner = playerArray[0].playerName + " and " + playerArray[1].playerName
         }
         if (scrollFound){
-            text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! The Lost Scroll to Eternal Joy has finally been found and as the scroll is being unrolled slowly, the entire town brims with anticipation. Perhaps, it is a map to greater riches. Alas! The opened scroll reveals an old recipe for Sicilian Fish Stew, written neatly and signed by Granny Doris. That day, the penguins found eternal joy indeed. The recipe became the crown piece of the Krappacino Archives and spurred a new age of chefs.')
+            text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! The Lost Scroll to Eternal Joy has finally been found and as the scroll is being unrolled slowly while the entire town brims with anticipation. Perhaps, it is a map to greater riches. Alas! The opened scroll reveals an old recipe for Sicilian Fish Stew, written neatly and signed by Granny Doris. That day, the penguins found eternal joy indeed. The recipe became the crown piece of the Krappacino Archives and spurred a new age of chefs.')
             eventBoardShow(text)
         }else {
             text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! Upon returning to Krappacino Town Hall, the younglings confirmed that the rumoured treasures were true after all. Their successful expedition set a pivotal point in the reputation of the Bronze Beak Penguins. This historical moment spurred a new age of explorers, young and old.')
@@ -576,6 +577,7 @@ const main = () => {
     $('.directionSigns').hide()
     loadClickListeners()
     loadAudioEffects()
+    console.log('game version alpha 02')
 }
 
 $(main);
