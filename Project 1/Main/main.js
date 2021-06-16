@@ -15,6 +15,7 @@ startGameButton = () => {
     if (playerCount){
         $('#landingPage').hide()
         $('#gameBoard').show()
+        $('.directionSigns').show()
         generatePathDivs()
         playerArray = generatePlayerDivs(playerCount)
         treasureArray = createTreasureArray(32)
@@ -37,6 +38,7 @@ createTreasureArray = (totalTiles) => {
     for (i=0; i<totalTiles; i++){
             treasureArray.push(Math.floor(i/tilesPerLane)+1)
     }
+    treasureArray[treasureArray.length -1 ] = 5
     return treasureArray
 }
 generatePlayerDivs = (playerCount) => {
@@ -77,7 +79,7 @@ generatePathDivs = () => {
     }
 }
 generateTreasureArray = () => {
-    treasureImg = ['', './Treasures/1 Treasure.png', './Treasures/2 Treasure.png', './Treasures/3 Treasure.png', './Treasures/4 Treasure.png']
+    treasureImg = ['', './Treasures/1 Treasure.png', './Treasures/2 Treasure.png', './Treasures/3 Treasure.png', './Treasures/4 Treasure.png', './Treasures/5 Treasure.png']
     count = 0
     for (i of treasureArray){
         var src = document.getElementById(count)
@@ -155,7 +157,10 @@ rollDice = () => {
         // $('#direction').text(currentPlayer.playerName + '\'s Diving!')
 }
 divePlayer = () => {
-    while (currentPlayer.movement != 0 && currentPlayer.position < 27){
+    lastTile = treasureArray.length
+    // while (currentPlayer.movement != 0 && currentPlayer.position < lastTile-1){
+    timerDive = setInterval( ()=>{
+        jumpSound.play()
         currentPlayer.movement --
         currentPlayer.position ++
         renderPath = '#' + currentPlayer.position
@@ -163,18 +168,30 @@ divePlayer = () => {
         if ($(renderPath).children().hasClass('penguins') || $(renderPath).hasClass('oxygenTank')){
             currentPlayer.movement++
         }
-        if (currentPlayer.position === 27){   
-            currentPlayer.movement = 0
-            $('#announcer').text('Congrats, you touched the ocean floor.')
-        }
+        $('#announcer').text(currentPlayer.playerName + ' dived down to tile ' +(currentPlayer.position + 1)+', choose action.')
+        actionTurn = true;
         renderPlayer = $('#' + currentPlayer.playerName)
         $(renderPath).prepend(renderPlayer)
-    }
-    $('#announcer').text(currentPlayer.playerName + ' dived down to tile ' +(currentPlayer.position + 1)+', choose action.')
-    actionTurn = true;
+        if (currentPlayer.position >= lastTile -3){
+            $('#danger1').show()
+            $('#shark1').show()
+        }
+        if (currentPlayer.position >= lastTile-1){   
+            currentPlayer.movement = 0
+            currentPlayer.position = lastTile-1
+            alert ('Congrats, you touched the ocean floor. Turn back now.')
+            currentPlayer.dive = false;
+            $('#announcer').text(currentPlayer.playerName + ' hears a deep growl.. time to go back..')
+        }
+        if(currentPlayer.movement <= 0 || currentPlayer.position === lastTile-1){
+            clearInterval(timerDive)
+        }   
+    }, 500) 
 }
 returnPlayer = () => {
-    while (currentPlayer.movement != 0){
+    // while (currentPlayer.movement != 0)
+    timerReturn = setInterval( ()=>{
+        jumpSound.play()
         currentPlayer.movement --
         currentPlayer.position --
         renderPath = '#' + currentPlayer.position
@@ -184,6 +201,11 @@ returnPlayer = () => {
         }
         renderPlayer = $('#' + currentPlayer.playerName)
         $(renderPath).prepend(renderPlayer)
+        if (currentPlayer.position === lastTile - 5){
+            $('#shark2').hide()
+            $('#danger2').hide()
+            $('#danger1').show()
+        }
         $('#announcer').text(currentPlayer.playerName + ' swam upwards to tile ' +(currentPlayer.position+1)+', choose action.')
         actionTurn = true;
         if (currentPlayer.position === -1){
@@ -196,7 +218,10 @@ returnPlayer = () => {
             actionTurn = false;
             switchPlayer()
         }
-    }   
+        if (currentPlayer.movement <= 0){
+            clearInterval(timerReturn)
+        }
+    }, 500)        
 }
 pickTreasure = () => {
     clickSound.play()
@@ -212,6 +237,12 @@ pickTreasure = () => {
                     treasureArray[currentPlayer.position] = 0
                     generateTreasureArray();
                     renderCurrentPlayer();
+                    if (treasureHere === 5){
+                        $('#danger1').hide()
+                        $('#shark1').hide()
+                        $('#danger2').show()
+                        $('#shark2').show()
+                    }
                     if(lastTurn){
                         newRound()
                     }
@@ -249,12 +280,12 @@ dropTreasure = () => {
                 }
             }
         } else {
-            $('#announcer').text('Roll the die first.')
+            $('#announcer').text('Roll the dice first.')
         }
     }
 } 
 renderCurrentPlayer = () => {
-    treasureImg = ['', './Treasures/1 Treasure.png', './Treasures/2 Treasure.png', './Treasures/3 Treasure.png', './Treasures/4 Treasure.png']
+    treasureImg = ['', './Treasures/1 Treasure.png', './Treasures/2 Treasure.png', './Treasures/3 Treasure.png', './Treasures/4 Treasure.png', './Treasures/5 Treasure.png']
     $player = currentPlayer.playerName
     $("#" + $player).empty()
     for (i of currentPlayer.treasurePouch){
@@ -378,7 +409,7 @@ historyHelp = (event) => {
     clickSound.play()
     $('.chosenHelp').attr('class', 'helpBtn')
     $(event.currentTarget).attr('class','chosenHelp')
-    $('#helpText').html("ATLANTIC TIMES, 3 MAY 2019 <br />  <br /> Rumours of untold treasures are spreading within the penguin tribe, Krappacino. Most of the penguinfolk are skeptical, except for a bunch of adolescents. Pooling their savings, they managed to afford a single yellow submarine for their expedition. <br /> <br /> This submarine is pivotal in their plan to bring back the rumored treasures (if any). However, the submarine is equipped with a limited supply of fresh air; to be shared among the young Krappas. The individual choices of these younglings will decide if the expedition will be known as The Abyss-Adventure or A Mis-Adventure.")
+    $('#helpText').html("ATLANTIC TIMES, 3 MAY 2019 <br />  <br /> Rumours of untold treasures is spreading within the penguin tribe, Krappacino. Even the mythical tales of the Lost Scroll to Eternal Joy became a trending topic in The Igloo Forums. Most of the penguinfolk remain skeptical, except for a bunch of adolescents. Pooling their savings, they managed to afford a single yellow submarine for their expedition. <br /> <br /> This submarine is pivotal in their plan to bring back the rumored treasures (if any). However, the submarine is equipped with a limited supply of fresh air; to be shared among the young Krappas. The individual choices of these younglings will decide if the expedition will be known as The Abyss-Adventure or A Mis-Adventure. <br /><br /> Will they find these untold treasures that will change their lives forever? <br /> Or .. will they just become another meme icon for future generations.")
 }
 turnHelp = (event) => {
     clickSound.play()
@@ -390,7 +421,7 @@ scoreHelp = (event) => {
     clickSound.play()
     $('.chosenHelp').attr('class', 'helpBtn')
     $(event.currentTarget).attr('class','chosenHelp')
-    $('#helpText').html("TREASURE TYPES: There are 4 tiers/types of treasures scattered in the abyss. Each type are different in appearance and score value (randomly generated). Treasures will only be converted to the player's score when player returns safely to submarine with it. If a player did not return to the submarine safely, all treasures that the player is holding will be lost.<br /> <br /> TIER 1: Gold Coins (2 - 3 points), found on the first 7 tiles. <br /><br /> TIER 2: Oak Crates (4 - 6 points), found on the next 7 tiles.<br /><br /> TIER 3: Willow Chests (7 - 10 points), found on the next 7 tiles.<br /><br /> TIER 4: Mahogany Chests (12 - 15 points), found on the last 7 tiles.")
+    $('#helpText').html("TREASURE TYPES: There are 4 tiers/types of treasures scattered in the abyss. Each type are different in appearance and score value (randomly generated). Treasures will only be converted to the player's score when player returns safely to submarine with it. If a player did not return to the submarine safely, all treasures that the player is holding will be lost.<br /> <br /> TIER 1: Gold Coins (2 - 3 points), found on the first 7 tiles. <br /><br /> TIER 2: Oak Crates (4 - 6 points), found on the next 7 tiles.<br /><br /> TIER 3: Willow Chests (7 - 10 points), found on the next 7 tiles.<br /><br /> TIER 4: Mahogany Chests (12 - 15 points), found on the next 6 tiles. <br /><br /> TIER 5: Lost Scroll to Eternal Joy (50 points), only found at the deepest floors of the abyss. It was last seen by Admiral Henrik.")
 }
 roundHelp = (event) => {
     clickSound.play()
@@ -433,11 +464,12 @@ loadClickListeners = () => {
 }
 loadAudioEffects = () => {
     audio.muted = false;
-    audio.volume = 0.4;
+    audio.volume = 0.3;
     clickSound = new audioEffect('./Audio/Click.wav')
     hoverSound = new audioEffect('./Audio/Hover.wav')
     pickSound = new audioEffect('./Audio/PickUp.wav')
     bubbleSound = new audioEffect('./Audio/Bubble.wav')
+    jumpSound = new audioEffect('./Audio/Jump.mp3')
 }
 class Player {
     constructor(name){
@@ -462,6 +494,8 @@ class Player {
                 {scoreAdd = (Math.ceil(Math.random()*4) + 6)}
             if(treasureConvert === 4)
                 {scoreAdd = (Math.ceil(Math.random()*4) + 11)}
+            if(treasureConvert === 5)
+                {scoreAdd = 50}
             this.score += scoreAdd
         }
         this.treasurePouch = []
@@ -487,6 +521,7 @@ const main = () => {
     $('#gameBoard').hide()
     $('#helpBox').hide()
     $('#scoreBoard').hide()
+    $('.directionSigns').hide()
     loadClickListeners()
     loadAudioEffects()
 }
