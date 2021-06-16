@@ -84,7 +84,7 @@ body {
     flex-wrap: wrap;
     align-items: flex-end;
     justify-content: space-evenly;
-    position: relative;
+    position: absolute;
     left: 360px;
     top: 150px;
     z-index: 1;
@@ -139,7 +139,7 @@ body {
     flex-wrap: wrap;
     align-items: flex-end;
     justify-content: center;
-    position: relative;
+    position: absolute;
     left: 360px;
     top: 150px;
     z-index: 2;
@@ -243,15 +243,15 @@ body {
     background-size: 100% 3px, auto;
 }
 #helpBox {
-    display: flex;
+    display: inline-flex;
+    position: absolute;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-end;
     justify-content: space-evenly;
-    position: relative;
     left: 360px;
     top: 110px;
-    z-index: 2;
+    z-index: 3;
     height: 400px;
     width: 600px;
     padding: 20px;
