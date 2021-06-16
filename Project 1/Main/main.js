@@ -8,7 +8,14 @@ var playerCount = choosePlayerButton = (event) => {
         penguinPreviews = ["./Penguins/1 Blue.png", './Penguins/2 Red.png', './Penguins/3 Green.png', './Penguins/4 Yellow.png', './Penguins/5 Black.png', './Penguins/6 Orange.png']
         $('#penguinPreview').append('<img src="' + penguinPreviews[i] + '">')
     }
-    tilesPerLane = playerCount > 3 ? 7 : 5
+    // tilesPerLane = playerCount > 3 ? 7 : 5
+    if (playerCount <= 3){
+        tilesPerLane = 5
+        $('#direction2').css("right", "250px")
+        $('#direction4').css("right", "300px")
+    } else {
+        tilesPerLane = 7
+    }
     return playerCount
 }
 startGameButton = () => {
@@ -101,7 +108,7 @@ whosFirstTurn = () => {
     currentPlayer = playerArray[0]
     $('#announcer').text(currentPlayer.playerName + "'s turn. Roll dice to start exploring the deep!")
     $('#direction').text('Roll or Set Return')
-    airSupply = (playerArray.length)*2 + 28
+    airSupply = (playerArray.length)*4 + 18
     $('#airSupply').text("Air Supply: " + airSupply)
     diceThrow = true;
     actionTurn = false
