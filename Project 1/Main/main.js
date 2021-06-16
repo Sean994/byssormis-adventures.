@@ -119,13 +119,24 @@ setReturnSub = () => {
         $('#announcer').text('You already deicded to return, time to roll.')
     }
     if (currentPlayer.position >= 0 && currentPlayer.dive && currentPlayer.treasurePouch.length > 0 && !actionTurn){
-        $('#direction').text('Returning to Sub!')
-        $('#announcer').text(currentPlayer.playerName + ' deicded to return to sub. Roll the die!')
-        currentPlayer.dive = false
+        $('#direction').text('Confirm return?')
+        $('#returnBoard').show()
     }
     if (currentPlayer.position < 0){
         $('#announcer').text(currentPlayer.playerName + ' is already in sub. Dive deeper!')
     }
+}
+setReturnConfirm = () => {
+    clickSound.play()
+    $('#direction').text('Returning to Sub!')
+    $('#announcer').text(currentPlayer.playerName + ' deicded to return to sub. Roll the die!')
+    currentPlayer.dive = false
+    $('#returnBoard').hide()
+}
+hideReturn = () => {
+    clickSound.play()
+    $('#direction').text('Roll or Set Return')
+    $('#returnBoard').hide()
 }
 rollDice = () => {
     clickSound.play()
@@ -169,7 +180,6 @@ divePlayer = () => {
             currentPlayer.movement++
         }
         $('#announcer').text(currentPlayer.playerName + ' dived down to tile ' +(currentPlayer.position + 1)+', choose action.')
-        actionTurn = true;
         renderPlayer = $('#' + currentPlayer.playerName)
         $(renderPath).prepend(renderPlayer)
         if (currentPlayer.position >= lastTile -3){
@@ -185,6 +195,7 @@ divePlayer = () => {
         }
         if(currentPlayer.movement <= 0 || currentPlayer.position === lastTile-1){
             clearInterval(timerDive)
+            actionTurn = true;
         }   
     }, 500) 
 }
@@ -207,7 +218,6 @@ returnPlayer = () => {
             $('#danger1').show()
         }
         $('#announcer').text(currentPlayer.playerName + ' swam upwards to tile ' +(currentPlayer.position+1)+', choose action.')
-        actionTurn = true;
         if (currentPlayer.position === -1){
             $('#submarine').prepend(renderPlayer)
             $('#announcer').text(currentPlayer.playerName + ' returned to the sub safely!')
@@ -220,6 +230,7 @@ returnPlayer = () => {
         }
         if (currentPlayer.movement <= 0){
             clearInterval(timerReturn)
+            actionTurn = true;
         }
     }, 500)        
 }
@@ -409,7 +420,7 @@ historyHelp = (event) => {
     clickSound.play()
     $('.chosenHelp').attr('class', 'helpBtn')
     $(event.currentTarget).attr('class','chosenHelp')
-    $('#helpText').html("ATLANTIC TIMES, 3 MAY 2019 <br />  <br /> Rumours of untold treasures is spreading within the penguin tribe, Krappacino. Even the mythical tales of the Lost Scroll to Eternal Joy became a trending topic in The Igloo Forums. Most of the penguinfolk remain skeptical, except for a bunch of adolescents. Pooling their savings, they managed to afford a single yellow submarine for their expedition. <br /> <br /> This submarine is pivotal in their plan to bring back the rumored treasures (if any). However, the submarine is equipped with a limited supply of fresh air; to be shared among the young Krappas. The individual choices of these younglings will decide if the expedition will be known as The Abyss-Adventure or A Mis-Adventure. <br /><br /> Will they find these untold treasures that will change their lives forever? <br /> Or .. will they just become another meme icon for future generations.")
+    $('#helpText').html("ATLANTIC TIMES, 3 MAY 2019 <br />  <br /> Rumours of untold treasures are spreading within the bronze-beak penguin tribe, Krappacino. A long forgotten myth - The Lost Scroll to Eternal Joy, is currently trending in The Igloo Forums. Most of the penguinfolk remain skeptical, except for a bunch of adolescents. Pooling their savings, they managed to afford a single yellow submarine for their expedition. <br /> <br /> This submarine is pivotal in their plan to bring back the rumored treasures (if any). However, the submarine is equipped with a limited supply of fresh air; to be shared among the young Krappas. The individual choices of these younglings will decide if the expedition will be known as The Abyss-Adventure or A Mis-Adventure. <br /><br /> Will they find these untold treasures and have their lives change forever? <br /> Or .. will they just become another meme icon for future generations.")
 }
 turnHelp = (event) => {
     clickSound.play()
@@ -421,7 +432,7 @@ scoreHelp = (event) => {
     clickSound.play()
     $('.chosenHelp').attr('class', 'helpBtn')
     $(event.currentTarget).attr('class','chosenHelp')
-    $('#helpText').html("TREASURE TYPES: There are 4 tiers/types of treasures scattered in the abyss. Each type are different in appearance and score value (randomly generated). Treasures will only be converted to the player's score when player returns safely to submarine with it. If a player did not return to the submarine safely, all treasures that the player is holding will be lost.<br /> <br /> TIER 1: Gold Coins (2 - 3 points), found on the first 7 tiles. <br /><br /> TIER 2: Oak Crates (4 - 6 points), found on the next 7 tiles.<br /><br /> TIER 3: Willow Chests (7 - 10 points), found on the next 7 tiles.<br /><br /> TIER 4: Mahogany Chests (12 - 15 points), found on the next 6 tiles. <br /><br /> TIER 5: Lost Scroll to Eternal Joy (50 points), only found at the deepest floors of the abyss. It was last seen by Admiral Henrik.")
+    $('#helpText').html("TREASURE TYPES: There are 4 tiers/types of treasures scattered in the abyss, with each type different in appearance and score value (randomly generated). Treasures will only be converted to the player's score when player returns safely to submarine with it. If a player did not return to the submarine safely, all treasures that the player is holding will be lost.<br /> <br /> TIER 1: Gold Coins (2 - 3 points), found on the first 7 tiles. <br /><br /> TIER 2: Oak Crates (4 - 6 points), found on the next 7 tiles.<br /><br /> TIER 3: Willow Chests (7 - 10 points), found on the next 7 tiles.<br /><br /> TIER 4: Mahogany Chests (12 - 15 points), found on the next 6 tiles. <br /><br /> TIER 5: Lost Scroll to Eternal Joy (50 points), only found at the deepest floors of the abyss. It was last seen by Admiral Henrik Dansgar.")
 }
 roundHelp = (event) => {
     clickSound.play()
@@ -455,10 +466,15 @@ loadClickListeners = () => {
     $('#scoreHelpBtn').on('click', (e) => scoreHelp(e))
     $('#roundHelpBtn').on('click', (e) => roundHelp(e))
     $('#closeHelpBtn').on('click', () => hideHelp())
+    $('#confirmReturn').on('click', () => setReturnConfirm())
+    $('#closeReturn').on('click', () => hideReturn())
     // Music and sound effects
     $(".choosePlayers").mouseenter((event) => hoverSound.play(event))
     $(".startOrHow").mouseenter((event) => hoverSound.play(event))
     $(".helpNStart").mouseenter((event) => hoverSound.play(event))
+    $(".helpBtn").mouseenter((event) => hoverSound.play(event))
+    $(".closeScoreBtn").mouseenter((event) => hoverSound.play(event))
+    $(".returnBtn").mouseenter((event) => hoverSound.play(event))
     $("#utilityList div").mouseenter((event) => hoverSound.play(event))
     $("#utilityList button").mouseenter((event) => hoverSound.play(event))
 }
@@ -521,6 +537,7 @@ const main = () => {
     $('#gameBoard').hide()
     $('#helpBox').hide()
     $('#scoreBoard').hide()
+    $('#returnBoard').hide()
     $('.directionSigns').hide()
     loadClickListeners()
     loadAudioEffects()

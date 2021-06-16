@@ -133,6 +133,60 @@ body {
 #scoreBoard button:hover {
     background-size: 100% 3px, auto;
 }
+#returnBoard {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+    left: 360px;
+    top: 150px;
+    z-index: 2;
+    height: 100px;
+    width: 500px;
+    padding: 20px;
+    background:dodgerblue;
+    border-radius: 15px;
+    box-shadow:  inset 5px 5px 7px rgba(255,255,255,0.3), inset -5px -5px 7px rgba(255,255,255,0.3);
+    background: #283869;
+}
+#returnBoard span {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    align-items:center;
+    flex-wrap: wrap;
+    color: white;
+    text-shadow: 1px 1px black;
+    height: 40px;
+    width: 500px; 
+    background-color: rgba(0,0,0,0.1);
+    padding: 10px;
+    border-radius: 20px;
+    margin: 0 10px;
+    cursor: pointer;
+}
+#returnBoard button {
+    height: 30px;
+    width: 80px;
+    font: 'Open Sans', sans-serif;
+    font-weight: bold;
+    border-radius: 5px;
+    border: black solid 2px;
+    color: black;
+    background-image: linear-gradient(dodgerblue, dodgerblue), linear-gradient(darkorange, orange);
+    background-size: 0 5px, auto;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    transition: all .4s ease-out;
+    margin: 10px 10px;
+    cursor: pointer;
+}
+#returnBoard button:hover {
+    background-size: 100% 3px, auto;
+}
 #helpBox {
     display: flex;
     flex-direction: row;
@@ -363,11 +417,12 @@ grid-template-columns: repeat(8,100px)
 }
 audio{
     display: inline-flex;
-    position: sticky;
-    position: -webkit-sticky;
+    position: absolute;
     /* left: 2%; */
-    top: 88%;
-    width: 200px;
+    top: 38px;
+    left: 1050px;
+    height: 40px;
+    width: 170px;
 }
 .directionSigns {
     position: absolute;
