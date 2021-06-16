@@ -8,6 +8,14 @@ var playerCount = choosePlayerButton = (event) => {
         penguinPreviews = ["./Penguins/1 Blue.png", './Penguins/2 Red.png', './Penguins/3 Green.png', './Penguins/4 Yellow.png', './Penguins/5 Black.png', './Penguins/6 Orange.png']
         $('#penguinPreview').append('<img src="' + penguinPreviews[i] + '">')
     }
+    // tilesPerLane = playerCount > 3 ? 7 : 5
+    if (playerCount <= 3){
+        tilesPerLane = 5
+        $('#direction2').css("right", "250px")
+        $('#direction4').css("right", "300px")
+    } else {
+        tilesPerLane = 7
+    }
     return playerCount
 }
 startGameButton = () => {
@@ -17,9 +25,9 @@ startGameButton = () => {
         $('#gameBoard').show()
         $('.directionSigns').show()
         $('#audio').show()
-        generatePathDivs()
+        generatePathDivs(tilesPerLane)
         playerArray = generatePlayerDivs(playerCount)
-        treasureArray = createTreasureArray(32)
+        treasureArray = createTreasureArray(totalTiles)
         generateTreasureArray()
     }
     $('body').css('background', "url('./Backgrounds/Underwater720.jpg')")
@@ -31,16 +39,6 @@ startGameButton = () => {
     whosFirstTurn();
     document.getElementById("audio").src = "./Audio/Blue World.mp3"
     audio.muted = false;
-}
-createTreasureArray = (totalTiles) => { 
-    var treasureArray = []
-    totalLanes = 4
-    tilesPerLane = totalTiles / totalLanes
-    for (i=0; i<totalTiles; i++){
-            treasureArray.push(Math.floor(i/tilesPerLane)+1)
-    }
-    treasureArray[treasureArray.length -1 ] = 5
-    return treasureArray
 }
 generatePlayerDivs = (playerCount) => {
     userName = ["Blue", "Red", "Green", "Yellow", "Black", "Orange"]
@@ -56,14 +54,14 @@ generatePlayerDivs = (playerCount) => {
     }
     return playerArray
 }
-generatePathDivs = () => {
+generatePathDivs = (tilesPerLane) => {
     classArray = ['grid1', 'grid2', 'grid3', 'grid4']
     $gameBoard = $('#gameBoard')
     adder = 0
-    tilesPerLane = 8
     totalLanes = 4
-    lastIDofPath2 = 8*2 - 1
-    lastIDofPath4 = 8*4 - 1
+    totalTiles = tilesPerLane * totalLanes
+    lastIDofPath2 = tilesPerLane*2 - 1
+    lastIDofPath4 = tilesPerLane*4 - 1
     for (i=0; i<totalLanes; i++){
         $grid = $('<div>').addClass('grid').attr('id', 'grid'+(i+1))
         $gameBoard.append($grid)
@@ -78,6 +76,14 @@ generatePathDivs = () => {
         }
         adder += tilesPerLane
     }
+}
+createTreasureArray = (totalTiles) => { 
+    var treasureArray = []
+    for (i=0; i<totalTiles; i++){
+            treasureArray.push(Math.floor(i/tilesPerLane)+1)
+    }
+    treasureArray[treasureArray.length -1 ] = 5
+    return treasureArray
 }
 generateTreasureArray = () => {
     treasureImg = ['', './Treasures/1 Treasure.png', './Treasures/2 Treasure.png', './Treasures/3 Treasure.png', './Treasures/4 Treasure.png', './Treasures/5 Treasure.png']
@@ -102,7 +108,7 @@ whosFirstTurn = () => {
     currentPlayer = playerArray[0]
     $('#announcer').text(currentPlayer.playerName + "'s turn. Roll dice to start exploring the deep!")
     $('#direction').text('Roll or Set Return')
-    airSupply = (playerArray.length)*2 + 28
+    airSupply = (playerArray.length)*4 + 18
     $('#airSupply').text("Air Supply: " + airSupply)
     diceThrow = true;
     actionTurn = false
@@ -383,11 +389,15 @@ newRound = () => {
         audio
         playerArray.sort((a,b)=>{return b.score - a.score})
         winner = playerArray[0].playerName
-        if (playerArray[0].score === playerArray[1].score){
-            winner = playerArray[0].playerName + " and " + playerArray[1].playerName
+        if (playerArray.length > 1){
+            if (playerArray[0].score === playerArray[1].score){
+                winner = playerArray[0].playerName + " and " + playerArray[1].playerName
+            }
+        } else {
+            winner = playerArray[0].playerName
         }
         if (scrollFound){
-            text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! The Lost Scroll to Eternal Joy has finally been found and as the scroll is being unrolled slowly while the entire town brims with anticipation. Perhaps, it is a map to greater riches. Alas! The opened scroll reveals an old recipe for Sicilian Fish Stew, written neatly and signed by Granny Doris. That day, the penguins found eternal joy indeed. The recipe became the crown piece of the Krappacino Archives and spurred a new age of chefs.')
+            text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! The Lost Scroll to Eternal Joy has finally been found. As the scroll is being unrolled slowly while the entire town brims with anticipation. Perhaps, it is a map to greater riches. Alas! The opened scroll reveals an old recipe for Sicilian Fish Stew, written neatly and signed by Granny Doris. That day, the penguins found eternal joy indeed. The recipe became the crown piece of the Krappacino Archives and spurred a new age of chefs.')
             eventBoardShow(text)
         }else {
             text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! Upon returning to Krappacino Town Hall, the younglings confirmed that the rumoured treasures were true after all. Their successful expedition set a pivotal point in the reputation of the Bronze Beak Penguins. This historical moment spurred a new age of explorers, young and old.')
@@ -577,7 +587,7 @@ const main = () => {
     $('.directionSigns').hide()
     loadClickListeners()
     loadAudioEffects()
-    console.log('game version alpha 02')
+    console.log('game version alpha 03. Fixed single player no ending bug. Auto generate path length according to players chosen.')
 }
 
 $(main);
