@@ -10,13 +10,16 @@ var playerCount = choosePlayerButton = (event) => {
     }
     // tilesPerLane = playerCount > 3 ? 7 : 5
     if (playerCount <= 3){
-        tilesPerLane = 5
-        airSupply = (playerArray.length)*4 + 18
-        $('#direction2').css("right", "250px")
-        $('#direction4').css("right", "300px")
+        airSupply = (playerCount)*2 + 16
+        tilesPerLane = 6
+        $('#direction2').css("right", "200px")
+        $('#direction4').css("right", "250px")
     } else {
-        airSupply = (playerArray.length)*5 + 20
-        tilesPerLane = 7
+        airSupply = (playerCount)*3 + 18
+        tilesPerLane = 8
+        $('#direction1').css("left", "400px")
+        $('#direction2').css("right", "0px")
+        $('#direction4').css("right", "60px")
     }
     return playerCount
 }
@@ -343,7 +346,7 @@ switchPlayer = () => {
         airSupplyTurn(currentPlayer, treasureCount);
         }
         if(currentPlayer.dive === true){
-            $('#announcer').text(currentPlayer.playerName + "'s turn. Currently diving deeper. Roll the dice!")
+            $('#announcer').text(currentPlayer.playerName + "'s turn. Diving deeper. Roll the dice!")
         } else {
             $('#announcer').text(currentPlayer.playerName + "'s turn. Returning to the sub. Roll the dice!")
         }
@@ -396,7 +399,7 @@ newRound = () => {
             winner = playerArray[0].playerName
         }
         if (scrollFound){
-            text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! The Lost Scroll to Eternal Joy has finally been found. The scroll is slowly unrolled while the entire town brims with eager anticipation. Perhaps, it is a map to greater riches or secret tales of the deep. Alas! The opened scroll reveals an old recipe for Sicilian Fish Stew, written neatly and signed by Granny Doris. That day, the penguins found eternal joy indeed. The recipe became the crown piece of the Krappacino Archives and spurred a new age of chefs.')
+            text =   text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! The Lost Scroll to Eternal Joy has finally been found. The scroll is slowly unrolled while the entire town brims with eager anticipation. Perhaps, it is a map to greater riches or secret tales of the deep. Alas! The opened scroll reveals an old recipe for Sicilian Fish Stew, written neatly and signed by Granny Doris. That day, the penguins found eternal joy indeed. The recipe became the crown piece of the Krappacino Archives and spurred a new age of chefs.')
             eventBoardShow(text)
         }else {
             text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! Upon returning to Krappacino Town Hall, the younglings confirmed that the rumoured treasures were true after all. Their successful expedition set a pivotal point to the fame of the Bronze Beak Penguins. This historical moment spurred a new age of explorers, young and old.. Hoping that one day, they will find the Lost Scroll to Eternal Joy..')
@@ -415,7 +418,7 @@ newRound = () => {
             $(`#${playerArray[i].playerName}`).empty()
         }
         returnedPlayer = 0;
-        text = ('Round ' + (roundsOver) +' is over. Any penguins who were still mid-way back, panicked, dropped the weighty treasures and made it back safely. The penguins realized they can kick off the empty air tanks and propel themsleves forward into the deep. Penguins will now skip over tiles that has an air tank on them. Time to dive deeper in round ' + (roundsOver+1) + "!")
+        text = ('Round ' + (roundsOver) +' is over. Any penguins who were mid-way back, panicked, dropped their weighty treasures in order to return safely. The penguins realized they can kick off the empty air tanks and propel themsleves forward into the deep. Penguins will now skip over tiles that has an air tank on them. Time to dive deeper in round ' + (roundsOver+1) + "!")
         eventBoardShow(text)
         closeEmptyPath()
         playerArray.sort((a,b)=>{return a.score - b.score})
@@ -586,7 +589,7 @@ const main = () => {
     $('.directionSigns').hide()
     loadClickListeners()
     loadAudioEffects()
-    console.log('game version alpha 04. Fixed some sentences and balance score for Lost Scroll. commenting work to do next.')
+    console.log('game version alpha 05. Tidy up.')
 }
 
 $(main);
