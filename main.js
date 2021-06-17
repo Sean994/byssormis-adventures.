@@ -10,15 +10,16 @@ var playerCount = choosePlayerButton = (event) => {
     }
     // tilesPerLane = playerCount > 3 ? 7 : 5
     if (playerCount <= 3){
-        airSupply = (playerArray.length)*2 + 18
-        tilesPerLane = 5
-        $('#direction2').css("right", "250px")
-        $('#direction4').css("right", "300px")
+        airSupply = (playerCount)*2 + 16
+        tilesPerLane = 6
+        $('#direction2').css("right", "200px")
+        $('#direction4').css("right", "250px")
     } else {
-        airSupply = (playerArray.length)*2 + 20
+        airSupply = (playerCount)*3 + 18
         tilesPerLane = 8
-        $('#direction2').css("right", "110px")
-        $('#direction4').css("right", "140px")
+        $('#direction1').css("left", "400px")
+        $('#direction2').css("right", "0px")
+        $('#direction4').css("right", "60px")
     }
     return playerCount
 }
@@ -588,7 +589,7 @@ const main = () => {
     $('.directionSigns').hide()
     loadClickListeners()
     loadAudioEffects()
-    console.log('game version alpha 04. Fixed some sentences and balance score for Lost Scroll. commenting work to do next.
+    console.log('game version alpha 05. Tidy up.')
 }
 
 $(main);
