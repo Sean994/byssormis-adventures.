@@ -10,12 +10,12 @@ var playerCount = choosePlayerButton = (event) => {
         $('#penguinPreview').append('<img src="' + penguinPreviews[i] + '">')
     }
     if (playerCount <= 3){
-        airSupply = (playerCount)*2 + 16
+        airSupply = (playerCount)*2 + 21
         tilesPerLane = 6
         $('#direction2').css("right", "200px")
         $('#direction4').css("right", "250px")
     } else {
-        airSupply = (playerCount)*3 + 12
+        airSupply = (playerCount)*3 + 18
         tilesPerLane = 8
         $('#direction1').css("left", "400px")
         $('#direction2').css("right", "0px")
@@ -400,12 +400,11 @@ newRound = () => {
             winner = playerArray[0].playerName
         }
         if (scrollFound){
-            $('#airSupply').text('Fish Stew')
             gameEnding()
+            $('#airSupply').text('Fish Stew')
             text =   text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! The Lost Scroll of Jubilee has finally been found. The scroll is slowly unrolled while the entire town brims with eager anticipation. Perhaps, it is a map to greater riches or secret tales of the deep. Alas! The opened scroll reveals an old recipe for Sicilian Fish Stew, written neatly and signed by Granny Doris. Till this day, the penguins celebrate the founding day. The recipe became the crown piece of the Krappacino Archives and spurred a new age of chefs.')
             eventBoardShow(text)
         }else {
-            $('#airSupply').text('@easyMoneySniper')
             gameEnding()
             text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! Upon returning to Krappacino Town Hall, the younglings confirmed that the rumoured treasures were true after all. Their successful expedition set a pivotal point to the fame of the Bronze Beak Penguins. This historical moment spurred a new age of explorers, young and old.. Hoping that one day, they will find the Lost Scroll of Jubilee..')
             eventBoardShow(text)
@@ -431,13 +430,15 @@ newRound = () => {
     }
 }
 gameEnding = () => {
-    $('body').css('background', "url('./Backgrounds/Ending1.png')")
+    $('body').css('background', "url('./Backgrounds/Ending2.png')")
     $('body').css('background-repeat', "no-repeat")
     $('body').css('background-size', "1280px auto")
     $('#announcer').text('Congratulations! You are a hero of Krappacino!')
-    $('#airSupply').text('Fish Stew')
-    $('#direction').text('Bravo Amigo')
-    $('#tileAction').text('Sean994')
+    $('#announcer').on('click', () => eventBoardShow(text))
+    $('#direction').text('#SG-SEI-30')
+    $('#tileAction').text('@Sean994')
+    $('#airSupply').text('Click to reset')
+    $('#airSupply').on('click', () => location.reload())
     $('#rollDie').off()
     $('#returnSub').off()
     $('#pickTreasure').off()
@@ -611,7 +612,7 @@ const main = () => {
     $('.directionSigns').hide()
     loadClickListeners()
     loadAudioEffects()
-    console.log('game version alpha 05. Tidy up.')
+    console.log('Beta 17_6-01. Ending background, air supply rebalance.')
 }
 
 $(main);
