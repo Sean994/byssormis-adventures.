@@ -4,18 +4,18 @@ var playerCount = choosePlayerButton = (event) => {
     $(event.currentTarget).attr('class', 'chosen')
     playerCount = $(event.currentTarget).attr('players')
     $('#penguinPreview').empty()
+    penguinPreviews = ["./Penguins/1 Blue.png", './Penguins/2 Red.png', './Penguins/3 Green.png', './Penguins/4 Yellow.png', './Penguins/5 Black.png', './Penguins/6 Orange.png']
     for (i=0; i<playerCount; i++){
-        penguinPreviews = ["./Penguins/1 Blue.png", './Penguins/2 Red.png', './Penguins/3 Green.png', './Penguins/4 Yellow.png', './Penguins/5 Black.png', './Penguins/6 Orange.png']
+
         $('#penguinPreview').append('<img src="' + penguinPreviews[i] + '">')
     }
-    // tilesPerLane = playerCount > 3 ? 7 : 5
     if (playerCount <= 3){
         airSupply = (playerCount)*2 + 16
         tilesPerLane = 6
         $('#direction2').css("right", "200px")
         $('#direction4').css("right", "250px")
     } else {
-        airSupply = (playerCount)*3 + 18
+        airSupply = (playerCount)*3 + 12
         tilesPerLane = 8
         $('#direction1').css("left", "400px")
         $('#direction2').css("right", "0px")
@@ -25,7 +25,7 @@ var playerCount = choosePlayerButton = (event) => {
 }
 startGameButton = () => {
     clickSound.play()  
-    if (playerCount){
+    if (playerCount>0){
         $('#landingPage').hide()
         $('#gameBoard').show()
         $('.directionSigns').show()
@@ -34,20 +34,21 @@ startGameButton = () => {
         playerArray = generatePlayerDivs(playerCount)
         treasureArray = createTreasureArray(totalTiles)
         generateTreasureArray()
+        $('body').css('background', "url('./Backgrounds/Underwater720.jpg')")
+        $('body').css('background-repeat', "no-repeat")
+        scrollFound = false;
+        turnSwitcher = 0
+        roundsOver = 0
+        returnedPlayer = 0
+        whosFirstTurn();
+        document.getElementById("audio").src = "./Audio/Blue World.mp3"
+        audio.muted = false;
+    } else {
+        eventBoardShow('Pick number of players first.')
     }
-    $('body').css('background', "url('./Backgrounds/Underwater720.jpg')")
-    $('body').css('background-repeat', "no-repeat")
-    scrollFound = false;
-    turnSwitcher = 0
-    roundsOver = 0
-    returnedPlayer = 0
-    whosFirstTurn();
-    document.getElementById("audio").src = "./Audio/Blue World.mp3"
-    audio.muted = false;
 }
 generatePlayerDivs = (playerCount) => {
     userName = ["Blue", "Red", "Green", "Yellow", "Black", "Orange"]
-    penguinPreviews = ["./Penguins/1 Blue.png", './Penguins/2 Red.png', './Penguins/3 Green.png', './Penguins/4 Yellow.png', './Penguins/5 Black.png', './Penguins/6 Orange.png']
     var playerArray = []
     for(let i = 0; i<playerCount; i++){
         playerArray.push( new Player (userName[i])) // array gets new Player Obj
@@ -399,10 +400,14 @@ newRound = () => {
             winner = playerArray[0].playerName
         }
         if (scrollFound){
-            text =   text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! The Lost Scroll to Eternal Joy has finally been found. The scroll is slowly unrolled while the entire town brims with eager anticipation. Perhaps, it is a map to greater riches or secret tales of the deep. Alas! The opened scroll reveals an old recipe for Sicilian Fish Stew, written neatly and signed by Granny Doris. That day, the penguins found eternal joy indeed. The recipe became the crown piece of the Krappacino Archives and spurred a new age of chefs.')
+            $('#airSupply').text('Fish Stew')
+            gameEnding()
+            text =   text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! The Lost Scroll of Jubilee has finally been found. The scroll is slowly unrolled while the entire town brims with eager anticipation. Perhaps, it is a map to greater riches or secret tales of the deep. Alas! The opened scroll reveals an old recipe for Sicilian Fish Stew, written neatly and signed by Granny Doris. Till this day, the penguins celebrate the founding day. The recipe became the crown piece of the Krappacino Archives and spurred a new age of chefs.')
             eventBoardShow(text)
         }else {
-            text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! Upon returning to Krappacino Town Hall, the younglings confirmed that the rumoured treasures were true after all. Their successful expedition set a pivotal point to the fame of the Bronze Beak Penguins. This historical moment spurred a new age of explorers, young and old.. Hoping that one day, they will find the Lost Scroll to Eternal Joy..')
+            $('#airSupply').text('@easyMoneySniper')
+            gameEnding()
+            text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! Upon returning to Krappacino Town Hall, the younglings confirmed that the rumoured treasures were true after all. Their successful expedition set a pivotal point to the fame of the Bronze Beak Penguins. This historical moment spurred a new age of explorers, young and old.. Hoping that one day, they will find the Lost Scroll of Jubilee..')
             eventBoardShow(text)
         }
     } else {
@@ -424,6 +429,23 @@ newRound = () => {
         playerArray.sort((a,b)=>{return a.score - b.score})
         whosFirstTurn();
     }
+}
+gameEnding = () => {
+    $('body').css('background', "url('./Backgrounds/Ending1.png')")
+    $('body').css('background-repeat', "no-repeat")
+    $('body').css('background-size', "1280px auto")
+    $('#announcer').text('Congratulations! You are a hero of Krappacino!')
+    $('#airSupply').text('Fish Stew')
+    $('#direction').text('Bravo Amigo')
+    $('#tileAction').text('Sean994')
+    $('#rollDie').off()
+    $('#returnSub').off()
+    $('#pickTreasure').off()
+    $('#dropTreasure').off()
+    $('#doNothingButton').off()
+    $('#submarine').hide()
+    $('.directionSigns').hide()
+    $('.grid').hide()
 }
 closeEmptyPath = () => {
     count = 0
@@ -461,7 +483,7 @@ historyHelp = (event) => {
     clickSound.play()
     $('.chosenHelp').attr('class', 'helpBtn')
     $(event.currentTarget).attr('class','chosenHelp')
-    $('#helpText').html("ATLANTIC TIMES, 3 MAY 2019 <br />  <br /> Rumours of untold treasures are spreading within the bronze-beak penguin tribe, Krappacino. A long forgotten myth - The Lost Scroll to Eternal Joy, is currently trending in The Igloo Forums. Most of the penguinfolk remain skeptical, except for a bunch of adolescents. Pooling their savings, they managed to afford a single yellow submarine for their expedition. <br /> <br /> This submarine is pivotal in their plan to bring back the rumored treasures (if any). However, the submarine can only bring a limited supply of fresh air; to be shared among the young Krappas. The individual choices of these younglings will decide if the expedition will be known as The Abyss-Adventure or A Mis-Adventure. <br /><br /> Will they find these untold treasures and have their lives change forever? <br /> Or .. will they just become another meme icon for future generations.")
+    $('#helpText').html("SOUTH ATLANTIC TIMES, 3 MAY 2019 <br />  <br /> Rumours of untold treasures are spreading within the bronze-beak penguin tribe, Krappacino. A long forgotten myth - The Lost Scroll to Jubilee, is currently trending in The Igloo Forums. Most of the penguinfolk remain skeptical, except for a bunch of adolescents. Pooling their savings, they managed to afford a single yellow submarine for their expedition. <br /> <br /> This submarine is pivotal in their plan to bring back the rumored treasures (if any). However, the submarine can only bring a limited supply of fresh air; to be shared among the young Krappas. The individual choices of these younglings will decide if the expedition will be known as The Abyss-Adventure or A Mis-Adventure. <br /><br /> Will they find these untold treasures and have their lives change forever? <br /> Or .. will they just become another meme icon for future generations.")
 }
 turnHelp = (event) => {
     clickSound.play()
@@ -473,13 +495,13 @@ scoreHelp = (event) => {
     clickSound.play()
     $('.chosenHelp').attr('class', 'helpBtn')
     $(event.currentTarget).attr('class','chosenHelp')
-    $('#helpText').html("TREASURE TYPES: There are 4 tiers/types of treasures scattered in the abyss, with each type different in appearance and score value (randomly generated). Treasures will only be converted to the player's score when player returns safely to submarine with it. If a player did not return to the submarine safely, all treasures that the player is holding will be lost.<br /> <br /> TIER 1: Gold Coins (2 - 3 points), found on the first 7 tiles. <br /><br /> TIER 2: Oak Crates (4 - 6 points), found on the next 7 tiles.<br /><br /> TIER 3: Willow Chests (7 - 10 points), found on the next 7 tiles.<br /><br /> TIER 4: Mahogany Chests (12 - 15 points), found on the next 6 tiles. <br /><br /> TIER 5: Lost Scroll to Eternal Joy (30 points), only found at the deepest floors of the abyss. It was last seen by Admiral Henrik Dansgar.")
+    $('#helpText').html("TREASURE TYPES: There are 4 tiers/types of treasures scattered in the abyss, with each type different in appearance and score value (randomly generated). Treasures will only be converted to the player's score when player returns safely to submarine with it. If a player did not return to the submarine safely, all treasures that the player is holding will be lost.<br /> <br /> TIER 1: Gold Coins (2 - 3 points), found on the first 7 tiles. <br /><br /> TIER 2: Oak Crates (4 - 6 points), found on the next 7 tiles.<br /><br /> TIER 3: Willow Chests (7 - 10 points), found on the next 7 tiles.<br /><br /> TIER 4: Mahogany Chests (12 - 15 points), found on the next 6 tiles. <br /><br /> TIER 5: Lost Scroll of Jubilee(32 points), this elusive artifact is only found in the deepest ocean floors. It was last seen by Admiral Henrik Dansgar.")
 }
 roundHelp = (event) => {
     clickSound.play()
     $('.chosenHelp').attr('class', 'helpBtn')
     $(event.currentTarget).attr('class','chosenHelp')
-    $('#helpText').html("Round ends when either one of these 2 conditions is met:<br>1. Air supply reaches 0. <br />2. All players returned safely to the submarine.<br /><br /> After each round, treasure tiles that are empty will be converted to oxygen tanks. Players can skip over these oxygen tanks to advance to the next nearest treasure tile. Player with the lowest score will start first in the next round.<br /><br />The whole game ends after 3 rounds and players will be ranked by their score earned by returning treasures safely.")
+    $('#helpText').html("Round ends when either one of these 2 conditions is met:<br>1. Air supply reaches 0. <br />2. All players returned safely to the submarine.<br /><br /> After each round, treasure tiles that are empty will be converted to oxygen tanks. In the subsequent rounds, players are able to skip over these oxygen tanks to advance to the next nearest treasure tile. Player with the lowest score will start first in the next round.<br /><br />The whole game ends after 3 rounds and players will be ranked by their score earned by returning treasures safely.")
 }
 hideHelp = () => {
     clickSound.play()
@@ -547,15 +569,15 @@ class Player {
         for (let i = 0; i<this.treasurePouch.length; i++){
             treasureConvert = this.treasurePouch[i]
             if(treasureConvert === 1)
-                {scoreAdd = (Math.ceil(Math.random()*2) + 1)}
+                {scoreAdd = (Math.ceil(Math.random()*2) + 1)} // 2 to 3
             if(treasureConvert === 2)
-                {scoreAdd = (Math.ceil(Math.random()*3) + 3)}
+                {scoreAdd = (Math.ceil(Math.random()*3) + 3)} // 4 to 6
             if(treasureConvert === 3)
-                {scoreAdd = (Math.ceil(Math.random()*4) + 6)}
+                {scoreAdd = (Math.ceil(Math.random()*4) + 6)} // 7 to 10
             if(treasureConvert === 4)
-                {scoreAdd = (Math.ceil(Math.random()*4) + 11)}
+                {scoreAdd = (Math.ceil(Math.random()*4) + 11)} // 12 to 15
             if(treasureConvert === 5)
-                {scoreAdd = 30
+                {scoreAdd = 32
                 scrollFound = true;
                 }
             this.score += scoreAdd
