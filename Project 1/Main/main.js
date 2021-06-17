@@ -363,8 +363,8 @@ switchPlayer = () => {
         }
     }
 }
-airSupplyTurn = (player, treasureHold) => {
-    airSupply -= treasureHold
+airSupplyTurn = (player, treasure) => {
+    airSupply -= treasure
     if (airSupply > 0 ){
         bubbleSound.play()
         treasureText = treasure>1 ? "treasure boxes":"treasure box"
