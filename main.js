@@ -15,6 +15,8 @@ var playerCount = choosePlayerButton = (event) => {
         $('#direction4').css("right", "300px")
     } else {
         tilesPerLane = 7
+        $('#direction2').css("right", "110px")
+        $('#direction4').css("right", "140px")
     }
     return playerCount
 }
