@@ -10,11 +10,13 @@ var playerCount = choosePlayerButton = (event) => {
     }
     // tilesPerLane = playerCount > 3 ? 7 : 5
     if (playerCount <= 3){
+        airSupply = (playerArray.length)*2 + 18
         tilesPerLane = 5
         $('#direction2').css("right", "250px")
         $('#direction4').css("right", "300px")
     } else {
-        tilesPerLane = 7
+        airSupply = (playerArray.length)*2 + 20
+        tilesPerLane = 8
         $('#direction2').css("right", "110px")
         $('#direction4').css("right", "140px")
     }
@@ -110,7 +112,6 @@ whosFirstTurn = () => {
     currentPlayer = playerArray[0]
     $('#announcer').text(currentPlayer.playerName + "'s turn. Roll dice to start exploring the deep!")
     $('#direction').text('Roll or Set Return')
-    airSupply = (playerArray.length)*4 + 18
     $('#airSupply').text("Air Supply: " + airSupply)
     diceThrow = true;
     actionTurn = false
@@ -223,13 +224,11 @@ divePlayer = () => {
     }, 300) 
 }
 returnPlayer = () => {
-    // while (currentPlayer.movement != 0)
     timerReturn = setInterval( ()=>{
         jumpSound.play()
         currentPlayer.movement --
         currentPlayer.position --
         renderPath = '#' + currentPlayer.position
-        // To check if landing div has any existing penguins
         if ($(renderPath).children().hasClass('penguins') || $(renderPath).hasClass('oxygenTank')){
             currentPlayer.movement++
         }
@@ -346,7 +345,7 @@ switchPlayer = () => {
         airSupplyTurn(currentPlayer, treasureCount);
         }
         if(currentPlayer.dive === true){
-            $('#announcer').text(currentPlayer.playerName + "'s turn. Currently diving deeper. Roll the dice!")
+            $('#announcer').text(currentPlayer.playerName + "'s turn. Diving deeper. Roll the dice!")
         } else {
             $('#announcer').text(currentPlayer.playerName + "'s turn. Returning to the sub. Roll the dice!")
         }
@@ -399,10 +398,10 @@ newRound = () => {
             winner = playerArray[0].playerName
         }
         if (scrollFound){
-            text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! The Lost Scroll to Eternal Joy has finally been found. As the scroll is being unrolled slowly while the entire town brims with anticipation. Perhaps, it is a map to greater riches. Alas! The opened scroll reveals an old recipe for Sicilian Fish Stew, written neatly and signed by Granny Doris. That day, the penguins found eternal joy indeed. The recipe became the crown piece of the Krappacino Archives and spurred a new age of chefs.')
+            text =   text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! The Lost Scroll to Eternal Joy has finally been found. The scroll is slowly unrolled while the entire town brims with eager anticipation. Perhaps, it is a map to greater riches or secret tales of the deep. Alas! The opened scroll reveals an old recipe for Sicilian Fish Stew, written neatly and signed by Granny Doris. That day, the penguins found eternal joy indeed. The recipe became the crown piece of the Krappacino Archives and spurred a new age of chefs.')
             eventBoardShow(text)
         }else {
-            text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! Upon returning to Krappacino Town Hall, the younglings confirmed that the rumoured treasures were true after all. Their successful expedition set a pivotal point in the reputation of the Bronze Beak Penguins. This historical moment spurred a new age of explorers, young and old.')
+            text = (winner + ' wins with a highest score of ' + playerArray[0].score + '! Upon returning to Krappacino Town Hall, the younglings confirmed that the rumoured treasures were true after all. Their successful expedition set a pivotal point to the fame of the Bronze Beak Penguins. This historical moment spurred a new age of explorers, young and old.. Hoping that one day, they will find the Lost Scroll to Eternal Joy..')
             eventBoardShow(text)
         }
     } else {
@@ -418,7 +417,7 @@ newRound = () => {
             $(`#${playerArray[i].playerName}`).empty()
         }
         returnedPlayer = 0;
-        text = ('Round ' + (roundsOver) +' is over. Any penguins who were still mid-way back, panicked, dropped the weighty treasures and made it back safely. The penguins realized they can kick off the empty air tanks and propel themsleves forward into the deep. Penguins will now skip over tiles that has an air tank on them. Time to dive deeper in round ' + (roundsOver+1) + "!")
+        text = ('Round ' + (roundsOver) +' is over. Any penguins who were mid-way back, panicked, dropped their weighty treasures in order to return safely. The penguins realized they can kick off the empty air tanks and propel themsleves forward into the deep. Penguins will now skip over tiles that has an air tank on them. Time to dive deeper in round ' + (roundsOver+1) + "!")
         eventBoardShow(text)
         closeEmptyPath()
         playerArray.sort((a,b)=>{return a.score - b.score})
@@ -473,7 +472,7 @@ scoreHelp = (event) => {
     clickSound.play()
     $('.chosenHelp').attr('class', 'helpBtn')
     $(event.currentTarget).attr('class','chosenHelp')
-    $('#helpText').html("TREASURE TYPES: There are 4 tiers/types of treasures scattered in the abyss, with each type different in appearance and score value (randomly generated). Treasures will only be converted to the player's score when player returns safely to submarine with it. If a player did not return to the submarine safely, all treasures that the player is holding will be lost.<br /> <br /> TIER 1: Gold Coins (2 - 3 points), found on the first 7 tiles. <br /><br /> TIER 2: Oak Crates (4 - 6 points), found on the next 7 tiles.<br /><br /> TIER 3: Willow Chests (7 - 10 points), found on the next 7 tiles.<br /><br /> TIER 4: Mahogany Chests (12 - 15 points), found on the next 6 tiles. <br /><br /> TIER 5: Lost Scroll to Eternal Joy (50 points), only found at the deepest floors of the abyss. It was last seen by Admiral Henrik Dansgar.")
+    $('#helpText').html("TREASURE TYPES: There are 4 tiers/types of treasures scattered in the abyss, with each type different in appearance and score value (randomly generated). Treasures will only be converted to the player's score when player returns safely to submarine with it. If a player did not return to the submarine safely, all treasures that the player is holding will be lost.<br /> <br /> TIER 1: Gold Coins (2 - 3 points), found on the first 7 tiles. <br /><br /> TIER 2: Oak Crates (4 - 6 points), found on the next 7 tiles.<br /><br /> TIER 3: Willow Chests (7 - 10 points), found on the next 7 tiles.<br /><br /> TIER 4: Mahogany Chests (12 - 15 points), found on the next 6 tiles. <br /><br /> TIER 5: Lost Scroll to Eternal Joy (30 points), only found at the deepest floors of the abyss. It was last seen by Admiral Henrik Dansgar.")
 }
 roundHelp = (event) => {
     clickSound.play()
@@ -555,7 +554,7 @@ class Player {
             if(treasureConvert === 4)
                 {scoreAdd = (Math.ceil(Math.random()*4) + 11)}
             if(treasureConvert === 5)
-                {scoreAdd = 50
+                {scoreAdd = 30
                 scrollFound = true;
                 }
             this.score += scoreAdd
@@ -589,7 +588,7 @@ const main = () => {
     $('.directionSigns').hide()
     loadClickListeners()
     loadAudioEffects()
-    console.log('game version alpha 03. Fixed single player no ending bug. Auto generate path length according to players chosen.')
+    console.log('game version alpha 04. Fixed some sentences and balance score for Lost Scroll. commenting work to do next.
 }
 
 $(main);
