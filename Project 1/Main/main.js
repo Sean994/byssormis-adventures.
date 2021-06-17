@@ -10,12 +10,14 @@ var playerCount = choosePlayerButton = (event) => {
         $('#penguinPreview').append('<img src="' + penguinPreviews[i] + '">')
     }
     if (playerCount <= 3){
-        airSupply = (playerCount)*2 + 21
+        airSupplyMax = (playerCount)*2 + 21
+        airSupply = airSupplyMax
         tilesPerLane = 6
         $('#direction2').css("right", "200px")
         $('#direction4').css("right", "250px")
     } else {
-        airSupply = (playerCount)*3 + 18
+        airSupplyMax = (playerCount)*3 + 18
+        airSupply = airSupplyMax
         tilesPerLane = 8
         $('#direction1').css("left", "400px")
         $('#direction2').css("right", "0px")
@@ -361,8 +363,8 @@ switchPlayer = () => {
         }
     }
 }
-airSupplyTurn = (player, treasure) => {
-    airSupply -= treasure
+airSupplyTurn = (player, treasureHold) => {
+    airSupply -= treasureHold
     if (airSupply > 0 ){
         bubbleSound.play()
         treasureText = treasure>1 ? "treasure boxes":"treasure box"
@@ -419,10 +421,11 @@ newRound = () => {
             playerArray[i].treasurePouch = []
             playerArray[i].position = -1
             playerArray[i].movement = 0
+            airSupply = airSupplyMax
             $(`#${playerArray[i].playerName}`).empty()
         }
         returnedPlayer = 0;
-        text = ('Round ' + (roundsOver) +' is over. Any penguins who were mid-way back, panicked, dropped their weighty treasures in order to return safely. The penguins realized they can kick off the empty air tanks and propel themsleves forward into the deep. Penguins will now skip over tiles that has an air tank on them. Time to dive deeper in round ' + (roundsOver+1) + "!")
+        text = ('Round ' + (roundsOver) +' is over. Any penguins who were mid-way back, panicked and dropped their weighty treasures in order to return safely. The penguins realized they can kick off the empty air tanks and propel themsleves forward into the deep. Penguins will now skip over tiles that has an air tank on them. Time to dive deeper in round ' + (roundsOver+1) + "!")
         eventBoardShow(text)
         closeEmptyPath()
         playerArray.sort((a,b)=>{return a.score - b.score})
@@ -612,7 +615,7 @@ const main = () => {
     $('.directionSigns').hide()
     loadClickListeners()
     loadAudioEffects()
-    console.log('Beta 17_6-01. Ending background, air supply rebalance.')
+    console.log('Beta 17_6-02. airSupplyFix.')
 }
 
 $(main);
