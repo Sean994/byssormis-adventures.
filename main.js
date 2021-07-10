@@ -6,7 +6,6 @@ var playerCount = choosePlayerButton = (event) => {
     $('#penguinPreview').empty()
     penguinPreviews = ["./Penguins/1 Blue.png", './Penguins/2 Red.png', './Penguins/3 Green.png', './Penguins/4 Yellow.png', './Penguins/5 Black.png', './Penguins/6 Orange.png']
     for (i=0; i<playerCount; i++){
-
         $('#penguinPreview').append('<img src="' + penguinPreviews[i] + '">')
     }
     if (playerCount <= 3){
@@ -97,16 +96,18 @@ generateTreasureArray = () => {
     treasureImg = ['', './Treasures/1 Treasure.png', './Treasures/2 Treasure.png', './Treasures/3 Treasure.png', './Treasures/4 Treasure.png', './Treasures/5 Treasure.png']
     count = 0
     for (i of treasureArray){
-        var src = document.getElementById(count)
+        var pathID = document.getElementById(count)
+
         var img = document.createElement("img")
         img.src = treasureImg[i]
         img.className = 'treasure'
+        
         if(treasureImg[i] !== ''){
-            treasureRefresh = src.getElementsByClassName('treasure')
+            treasureRefresh = pathID.getElementsByClassName('treasure')
             $(treasureRefresh).remove()
             src.appendChild(img)
         } else {
-            treasureRemove = src.getElementsByClassName('treasure')
+            treasureRemove = pathID.getElementsByClassName('treasure')
             $(treasureRemove).remove()
         }
         count++
@@ -394,12 +395,12 @@ newRound = () => {
         audio
         playerArray.sort((a,b)=>{return b.score - a.score})
         winner = playerArray[0].playerName
-        if (playerArray.length > 1){
+        if (playerArray.length > 1){ //tie condition
             if (playerArray[0].score === playerArray[1].score){
                 winner = playerArray[0].playerName + " and " + playerArray[1].playerName
             }
         } else {
-            winner = playerArray[0].playerName
+            winner = playerArray[0].playerName // single winner
         }
         if (scrollFound){
             gameEnding()
