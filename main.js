@@ -105,7 +105,7 @@ generateTreasureArray = () => {
         if(treasureImg[i] !== ''){
             treasureRefresh = pathID.getElementsByClassName('treasure')
             $(treasureRefresh).remove()
-            src.appendChild(img)
+            pathID.appendChild(img)
         } else {
             treasureRemove = pathID.getElementsByClassName('treasure')
             $(treasureRemove).remove()
@@ -616,7 +616,7 @@ const main = () => {
     $('.directionSigns').hide()
     loadClickListeners()
     loadAudioEffects()
-    console.log('Beta 17_6-02. airSupplyFix.')
+    console.log('Beta 14_7-01. variable fix on line 108.')
 }
 
 $(main);
